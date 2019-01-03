@@ -2,7 +2,7 @@
 
 cd DeepKnockoffs
 
-sudo python3 setup.py install --user
+sudo python setup.py install --user
 
 cd ..
 pwd
