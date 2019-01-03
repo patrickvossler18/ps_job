@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-ls
+
 cd DeepKnockoffs
 
-python3 setup.py install --user
+sudo python3 setup.py install --user
 
 cd ..
 pwd
