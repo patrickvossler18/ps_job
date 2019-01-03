@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ls
-cd /workspace/Deepknockoffs
+cd DeepKnockoffs
 
 python3 setup.py install --user
 
