@@ -13,7 +13,7 @@ p = 50
 # - gmm      : Gaussian mixture model
 # - mstudent : Multivariate Student's-t distribution
 # - sparse   : Multivariate sparse Gaussian distribution 
-model = "mstudent"
+model = "gaussian"
 distribution_params = parameters.GetDistributionParams(model, p)
 
 # Initialize the data generator
@@ -21,9 +21,16 @@ DataSampler = data.DataSampler(distribution_params)
 
 # Number of training examples
 n = 10000
+ncat = 10
+cat_columns = np.arange(0,ncat)
+num_cuts = 4
 
 # Sample training data
-X_train = DataSampler.sample(n)
+X_train = pd.DataFrame(DataSampler.sample(n))
+
+# Make the columns into categorical variables
+X_train.iloc[:,cat_columns] = X_train.iloc[:,cat_columns].apply(lambda x: pd.qcut(x, 4, retbins=False,labels=False), axis=0)
+
 
 SigmaHat = np.cov(X_train, rowvar=False)
 
@@ -69,9 +76,7 @@ pars['alphas'] = [1.,2.,4.,8.,16.,32.,64.,128.]
 
 
 # Save parameters
-np.save('/artifacts/pars.npy', pars) 
-
-
+np.save('/artifacts/pars.npy', pars)
 
 
 # Where to store the machine
