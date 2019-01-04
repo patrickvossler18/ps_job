@@ -69,10 +69,10 @@ pars['alphas'] = [1.,2.,4.,8.,16.,32.,64.,128.]
 
 
 # Where to store the machine
-checkpoint_name = "tmp/" + model
+checkpoint_name = model
 
 # Where to print progress information
-logs_name = "tmp/" + model + "_progress.txt"
+logs_name = model + "_progress.txt"
 
 # Initialize the machine
 machine = KnockoffMachine(pars, checkpoint_name=checkpoint_name, logs_name=logs_name)
