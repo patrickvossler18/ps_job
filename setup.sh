@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
-cd DeepKnockoffs
+# cd DeepKnockoffs
 
-sudo python setup.py install --user
+# sudo python setup.py install --user
 
-cd ..
-pwd
+# cd ..
+# pwd
 python3 student_t_network.py
