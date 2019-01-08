@@ -1,4 +1,5 @@
 import numpy as np
+import pandas as pd
 from DeepKnockoffs import KnockoffMachine
 from DeepKnockoffs import GaussianKnockoffs
 import data
@@ -26,10 +27,35 @@ cat_columns = np.arange(0,ncat)
 num_cuts = 4
 
 # Sample training data
-X_train = pd.DataFrame(DataSampler.sample(n))
+# X_train = pd.DataFrame(DataSampler.sample(n))
+# X_train.iloc[:,cat_columns] = X_train.iloc[:,cat_columns].apply(lambda x: pd.qcut(x, 4, retbins=False,labels=False), axis=0)
+# obs_logits = X_train.iloc[:,cat_columns].apply(lambda x: x.value_counts(normalize=True), axis=0)
 
+# logits_list = [obs_logits for i in range(0,n)]
+
+# for j in range(len(logits_list)):
+#     if j % 1000 == 0:
+#         print(j)
+#     a = logits_list[j].apply(lambda x: gumbel_softmax_sample(torch.FloatTensor(x.apply(np.log)),0.8)).unstack()
+#     res = pd.concat([pd.DataFrame(a[i]).T.reset_index().drop(['index'],axis=1) for i in cat_columns ], axis = 1)
+#     logits_list[j] = res
+
+# logits_df = pd.concat(logits_list)
+# X_train_cont = X_train.drop(cat_columns,axis=1)
+# X_train = pd.concat([logits_df.reset_index(drop=True),X_train_cont.reset_index(drop=True) ], axis=1)
+# res = pd.concat([pd.DataFrame(a[i]).T.reset_index().drop(['index'],axis=1) for i in range(0,num_cuts) ], axis = 0)
+# Variable(torch.FloatTensor([[math.log(0.1), math.log(0.4), math.log(0.3), math.log(0.2)]] * 20000))
 # Make the columns into categorical variables
-X_train.iloc[:,cat_columns] = X_train.iloc[:,cat_columns].apply(lambda x: pd.qcut(x, 4, retbins=False,labels=False), axis=0)
+
+## USE THIS FOR THE K-1 DUMMY VARIABLE TEST
+X_train = pd.DataFrame(DataSampler.sample(n))
+X_train.iloc[:,cat_columns] = X_train.iloc[:,cat_columns].apply(lambda x: pd.qcut(x, 4, retbins=False,labels=False), axis=0).astype(str)
+X_train_dums = pd.get_dummies(X_train.iloc[:,cat_columns],drop_first=True, prefix= X_train.iloc[:,cat_columns].columns.values.astype(str).tolist())
+X_train = pd.concat([X_train_dums.reset_index(drop=True),X_train.drop(cat_columns,axis = 1).reset_index(drop=True)], axis=1)
+
+# Use the observed frequencies of the different categorical values as the probabilities for the observed distribution
+# Generate gumbel-softmax samples using these observed probabilities (do this for each row or for all of the data?)
+# Replace the observed discrete values with the sampled values and run the network with these 
 
 
 SigmaHat = np.cov(X_train, rowvar=False)
@@ -42,6 +68,7 @@ corr_g = (np.diag(SigmaHat) - np.diag(second_order.Ds)) / np.diag(SigmaHat)
 
 
 training_params = parameters.GetTrainingHyperParams(model)
+p = X_train.shape[1]
 
 # Set the parameters for training deep knockoffs
 pars = dict()
