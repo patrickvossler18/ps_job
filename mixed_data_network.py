@@ -116,4 +116,4 @@ logs_name = "/artifacts/" + model + "_progress.txt"
 machine = KnockoffMachine(pars, checkpoint_name=checkpoint_name, logs_name=logs_name)
 
 # Train the machine
-machine.train(X_train)
+machine.train(X_train.values())
