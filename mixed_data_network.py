@@ -87,6 +87,8 @@ pars['epoch_length'] = 100
 pars['family'] = "continuous"
 # Dimensions of the data
 pars['p'] = p
+# List of categorical variables
+pars['cat_var_idx'] = np.arange(0,(ncat * (num_cuts-1)))
 # Size of the test set
 pars['test_size']  = 0
 # Batch size
