@@ -48,27 +48,25 @@ num_cuts = 4
 # Make the columns into categorical variables
 
 ## USE THIS FOR THE K-1 DUMMY VARIABLE TEST
-X_train = pd.DataFrame(DataSampler.sample(n))
-X_train.iloc[:,cat_columns] = X_train.iloc[:,cat_columns].apply(lambda x: pd.qcut(x, 4, retbins=False,labels=False), axis=0).astype(str)
-X_train_dums = pd.get_dummies(X_train.iloc[:,cat_columns],drop_first=True, prefix= X_train.iloc[:,cat_columns].columns.values.astype(str).tolist())
-X_train = pd.concat([X_train_dums.reset_index(drop=True),X_train.drop(cat_columns,axis = 1).reset_index(drop=True)], axis=1)
-
-## USE THIS FOR JUST K DUMMY VARIABLES
 # X_train = pd.DataFrame(DataSampler.sample(n))
 # X_train.iloc[:,cat_columns] = X_train.iloc[:,cat_columns].apply(lambda x: pd.qcut(x, 4, retbins=False,labels=False), axis=0).astype(str)
-# X_train_dums = pd.get_dummies(X_train.iloc[:,cat_columns], prefix= X_train.iloc[:,cat_columns].columns.values.astype(str).tolist())
-# X_train = pd.concat([X_train.drop(cat_columns,axis = 1).reset_index(drop=True),X_train_dums.reset_index(drop=True)], axis=1)
+# X_train_dums = pd.get_dummies(X_train.iloc[:,cat_columns],drop_first=True, prefix= X_train.iloc[:,cat_columns].columns.values.astype(str).tolist())
+# X_train = pd.concat([X_train_dums.reset_index(drop=True),X_train.drop(cat_columns,axis = 1).reset_index(drop=True)], axis=1)
+
+## USE THIS FOR JUST K DUMMY VARIABLES
+X_train = pd.DataFrame(DataSampler.sample(n))
+X_train.iloc[:,cat_columns] = X_train.iloc[:,cat_columns].apply(lambda x: pd.qcut(x, 4, retbins=False,labels=False), axis=0)
 
 
-# Use the observed frequencies of the different categorical values as the probabilities for the observed distribution
-# Generate gumbel-softmax samples using these observed probabilities (do this for each row or for all of the data?)
-# Replace the observed discrete values with the sampled values and run the network with these 
 
-
-SigmaHat = np.cov(X_train.values, rowvar=False)
+SigmaHat = np.cov(X_train, rowvar=False)
 
 # Initialize generator of second-order knockoffs
 second_order = GaussianKnockoffs(SigmaHat, mu=np.mean(X_train,0), method="sdp")
+# X_tilde = second_order.generate(X_train)
+
+# X_tilde.iloc[:,cat_columns] = X_tilde.iloc[:,cat_columns].apply(lambda x: pd.qcut(x, 4, retbins=False,labels=False), axis=0)
+
 
 # Measure pairwise second-order knockoff correlations 
 corr_g = (np.diag(SigmaHat) - np.diag(second_order.Ds)) / np.diag(SigmaHat)
@@ -88,7 +86,7 @@ pars['family'] = "continuous"
 # Dimensions of the data
 pars['p'] = p
 # List of categorical variables
-pars['cat_var_idx'] = np.arange(0,(ncat * (num_cuts-1)))
+pars['cat_var_idx'] = np.arange(0,(ncat * (num_cuts)))
 # Size of the test set
 pars['test_size']  = 0
 # Batch size
