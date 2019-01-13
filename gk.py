@@ -20,26 +20,21 @@ def solve_sdp(Sigma, tol=1e-3):
     :param mu    : An array of means (p x 1)
     :return: A matrix of knockoff variables (n x p)
     """
-
     # Convert the covariance matrix to a correlation matrix
     # Check whether Sigma is positive definite
     if(np.min(np.linalg.eigvals(Sigma))<0):
         corrMatrix = cov2cor(Sigma + (1e-8)*np.eye(Sigma.shape[0]))
     else:
-        corrMatrix = cov2cor(Sigma)
-        
+        corrMatrix = cov2cor(Sigma) 
     p,_ = corrMatrix.shape
     s = cvx.Variable(p)
     objective = cvx.Maximize(sum(s))
     constraints = [ 2.0*corrMatrix >> cvx.diag(s) + cvx.diag([tol]*p), 0<=s, s<=1]
     prob = cvx.Problem(objective, constraints)
     prob.solve(solver='CVXOPT')
-    
     #assert prob.status == cvx.OPTIMAL
-    # print(prob.status)
-
+    print(prob.status)
     s = np.clip(np.asarray(s.value).flatten(), 0, 1)
-    
     # Scale back the results for a covariance matrix
     return np.multiply(s, np.diag(Sigma))
     
@@ -77,8 +72,8 @@ class GaussianKnockoffs:
         else:
             raise ValueError('Invalid Gaussian knockoff type: '+self.method)
         self.SigmaInvDs = linalg.lstsq(self.Sigma,self.Ds)[0]
-        self.V = 2.0*self.Ds - np.dot(self.Ds, self.SigmaInvDs)
-        self.LV = np.linalg.cholesky(self.V+1e-10*np.eye(self.p))
+        # self.V = 2.0*self.Ds - np.dot(self.Ds, self.SigmaInvDs)
+        # self.LV = np.linalg.cholesky(self.V+1e-10*np.eye(self.p))
         if linalg.eigh(self.V, eigvals_only=True, eigvals=(0,0))[0] <= tol:
             warnings.warn("Warning...........\
             The conditional covariance matrix for knockoffs is not positive definite. \
