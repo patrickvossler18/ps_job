@@ -72,7 +72,7 @@ class GaussianKnockoffs:
         else:
             raise ValueError('Invalid Gaussian knockoff type: '+self.method)
         self.SigmaInvDs = linalg.lstsq(self.Sigma,self.Ds)[0]
-        # self.V = 2.0*self.Ds - np.dot(self.Ds, self.SigmaInvDs)
+        self.V = 2.0*self.Ds - np.dot(self.Ds, self.SigmaInvDs)
         # self.LV = np.linalg.cholesky(self.V+1e-10*np.eye(self.p))
         if linalg.eigh(self.V, eigvals_only=True, eigvals=(0,0))[0] <= tol:
             warnings.warn("Warning...........\
