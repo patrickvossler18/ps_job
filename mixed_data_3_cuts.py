@@ -15,7 +15,7 @@ p = 50
 # - gmm      : Gaussian mixture model
 # - mstudent : Multivariate Student's-t distribution
 # - sparse   : Multivariate sparse Gaussian distribution 
-model = "gaussian"
+model = "mstudent"
 distribution_params = parameters.GetDistributionParams(model, p)
 
 # Initialize the data generator
