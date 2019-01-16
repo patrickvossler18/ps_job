@@ -12,7 +12,7 @@ p = 50
 # - gaussian : Multivariate Gaussian distribution
 # - gmm      : Gaussian mixture model
 # - mstudent : Multivariate Student's-t distribution
-# - sparse   : Multivariate sparse Gaussian distribution 
+# - sparse   : Multivariate sparse Gaussian distribution
 model = "mstudent"
 distribution_params = parameters.GetDistributionParams(model, p)
 
@@ -28,9 +28,9 @@ X_train = DataSampler.sample(n)
 SigmaHat = np.cov(X_train, rowvar=False)
 
 # Initialize generator of second-order knockoffs
-second_order = GaussianKnockoffs(SigmaHat, mu=np.mean(X_train,0), method="sdp")
+second_order = GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp")
 
-# Measure pairwise second-order knockoff correlations 
+# Measure pairwise second-order knockoff correlations
 corr_g = (np.diag(SigmaHat) - np.diag(second_order.Ds)) / np.diag(SigmaHat)
 
 
@@ -47,7 +47,7 @@ pars['family'] = "continuous"
 # Dimensions of the data
 pars['p'] = p
 # Size of the test set
-pars['test_size']  = 0
+pars['test_size'] = 0
 # Batch size
 pars['batch_size'] = int(0.5*n)
 # Learning rate
@@ -65,14 +65,11 @@ pars['DELTA'] = training_params['DELTA']
 # Target pairwise correlations between variables and knockoffs
 pars['target_corr'] = corr_g
 # Kernel widths for the MMD measure (uniform weights)
-pars['alphas'] = [1.,2.,4.,8.,16.,32.,64.,128.]
+pars['alphas'] = [1., 2., 4., 8., 16., 32., 64., 128.]
 
 
 # Save parameters
-np.save('/artifacts/pars.npy', pars) 
-
-
-
+np.save('/artifacts/pars.npy', pars)
 
 # Where to store the machine
 checkpoint_name = "/artifacts/" + model
