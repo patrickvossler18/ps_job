@@ -63,6 +63,8 @@ pars['p'] = p
 pars['cat_var_idx'] = np.arange(0, (ncat * (num_cuts)))
 # Number of categories
 pars['num_cuts'] = num_cuts
+# Multiplier for weighting discrete variables
+pars['kappa'] = 2
 # Size of the test set
 pars['test_size'] = 0
 # Batch size
