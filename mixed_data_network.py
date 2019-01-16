@@ -15,7 +15,7 @@ p = 50
 # - gmm      : Gaussian mixture model
 # - mstudent : Multivariate Student's-t distribution
 # - sparse   : Multivariate sparse Gaussian distribution
-model = "mstudent"
+model = "mixed"
 distribution_params = parameters.GetDistributionParams(model, p)
 
 # Initialize the data generator
@@ -24,7 +24,7 @@ DataSampler = data.DataSampler(distribution_params)
 # Number of training examples
 n = 10000
 ncat = 10
-cat_columns = np.arange(0,ncat)
+cat_columns = np.arange(0, ncat)
 num_cuts = 4
 
 # USE THIS FOR JUST K DUMMY VARIABLES
@@ -63,8 +63,10 @@ pars['p'] = p
 pars['cat_var_idx'] = np.arange(0, (ncat * (num_cuts)))
 # Number of categories
 pars['num_cuts'] = num_cuts
+# Boolean for using different weighting structure for decorr
+pars['use_weighting'] = False
 # Multiplier for weighting discrete variables
-pars['kappa'] = 2
+pars['kappa'] = 1
 # Size of the test set
 pars['test_size'] = 0
 # Batch size

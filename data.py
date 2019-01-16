@@ -164,6 +164,9 @@ class DataSampler:
         if(self.model_name=="gaussian"):
             self.model = GaussianAR1(self.p, params["rho"])
             self.name = "gaussian"
+        if(self.model_name=="mixed"):
+            self.model = GaussianAR1(self.p, params["rho"])
+            self.name = "gaussian"
         elif(self.model_name=="gmm"):
             self.model = GaussianMixtureAR1(self.p, params["rho-list"])
             self.name = "gmm"
