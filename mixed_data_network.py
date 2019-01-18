@@ -23,7 +23,7 @@ DataSampler = data.DataSampler(distribution_params)
 
 # Number of training examples
 n = 10000
-ncat = 10
+ncat = 25
 cat_columns = np.arange(0, ncat)
 num_cuts = 4
 
