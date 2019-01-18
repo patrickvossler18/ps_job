@@ -64,9 +64,9 @@ pars['cat_var_idx'] = np.arange(0, (ncat * (num_cuts)))
 # Number of categories
 pars['num_cuts'] = num_cuts
 # Boolean for using different weighting structure for decorr
-pars['use_weighting'] = True
+pars['use_weighting'] = False
 # Multiplier for weighting discrete variables
-pars['kappa'] = 2
+pars['kappa'] = 1
 # Size of the test set
 pars['test_size'] = 0
 # Batch size
