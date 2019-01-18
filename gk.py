@@ -25,7 +25,7 @@ def solve_sdp(Sigma, tol=1e-3):
     # Convert the covariance matrix to a correlation matrix
     # Check whether Sigma is positive definite
     if(np.min(np.linalg.eigvals(Sigma)) < 0):
-        corrMatrix = cov2cor(Sigma + (1e-2)*np.eye(Sigma.shape[0]))
+        corrMatrix = cov2cor(Sigma + (1e-1)*np.eye(Sigma.shape[0]))
     else:
         corrMatrix = cov2cor(Sigma)
     p, _ = corrMatrix.shape
