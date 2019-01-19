@@ -167,6 +167,9 @@ class DataSampler:
         if(self.model_name=="mixed"):
             self.model = GaussianAR1(self.p, params["rho"])
             self.name = "gaussian"
+        if(self.model_name=="mixed_student"):
+            self.model = MultivariateStudentT(self.p, params["df"], params["rho"])
+            self.name = "mstudent"
         elif(self.model_name=="gmm"):
             self.model = GaussianMixtureAR1(self.p, params["rho-list"])
             self.name = "gmm"

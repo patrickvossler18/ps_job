@@ -12,6 +12,9 @@ def GetDistributionParams(model, p):
     elif model == "mstudent":
         params["df"] = 10
         params["rho"] = 0.5
+    elif model == "mixed_student":
+        params["df"] = 10
+        params["rho"] = 0.5
     elif model == "mixed":
         params["rho"] = 0.5
     elif model == "sparse":
@@ -44,8 +47,10 @@ def GetTrainingHyperParams(model):
         params['DELTA'] = 1.0
     elif model == "mixed":
         params['LAMBDA'] = 0.01
-        # params['DELTA'] = 0.0001
-        params['DELTA'] = 0.0
+        params['DELTA'] = 0.0001
+    elif model == "mixed_student":
+        params['LAMBDA'] = 0.01
+        params['DELTA'] = 0.0001
     else:
         raise Exception('Unknown data distribution: ' + model)
 
