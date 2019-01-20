@@ -78,7 +78,7 @@ pars['cat_var_idx'] = np.arange(0, (ncat * (num_cuts)))
 # Number of categories
 pars['num_cuts'] = num_cuts
 # Size of regularizer
-pars['regularizer'] = grid_results[0]
+# pars['regularizer'] = grid_results[0]
 # Boolean for using different weighting structure for decorr
 pars['use_weighting'] = False
 # Multiplier for weighting discrete variables
