@@ -161,7 +161,7 @@ class DataSampler:
         self.standardize = standardize
 
         self.model_name = params["model"]
-        print self.model_name
+        print(self.model_name)
         if(self.model_name=="gaussian"):
             self.model = GaussianAR1(self.p, params["rho"])
             self.name = "gaussian"
