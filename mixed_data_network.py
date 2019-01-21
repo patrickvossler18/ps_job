@@ -80,9 +80,9 @@ pars['num_cuts'] = num_cuts
 # Size of regularizer
 # pars['regularizer'] = grid_results[0]
 # Boolean for using different weighting structure for decorr
-pars['use_weighting'] = False
+pars['use_weighting'] = True
 # Multiplier for weighting discrete variables
-pars['kappa'] = 1
+pars['kappa'] = 4
 # Size of the test set
 pars['test_size'] = 0
 # Batch size
