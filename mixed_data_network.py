@@ -82,7 +82,7 @@ pars['num_cuts'] = num_cuts
 # Boolean for using different weighting structure for decorr
 pars['use_weighting'] = True
 # Multiplier for weighting discrete variables
-pars['kappa'] = 4
+pars['kappa'] = 10
 # Size of the test set
 pars['test_size'] = 0
 # Batch size
