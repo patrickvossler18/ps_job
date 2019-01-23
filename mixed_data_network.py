@@ -53,7 +53,7 @@ SigmaHat = np.cov(X_train, rowvar=False)
 
 # corr_g = grid_results[1]
 # Initialize generator of second-order knockoffs
-second_order = gk.GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp", regularizer=1e-1)
+second_order = gk.GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp", regularizer=1e-4)
 
 # Measure pairwise second-order knockoff correlations
 corr_g = (np.diag(SigmaHat) - np.diag(second_order.Ds)) / np.diag(SigmaHat)
@@ -84,7 +84,7 @@ pars['num_cuts'] = num_cuts
 # Boolean for using different weighting structure for decorr
 pars['use_weighting'] = True
 # Multiplier for weighting discrete variables
-pars['kappa'] = 10
+pars['kappa'] = 1
 # Size of the test set
 pars['test_size'] = 0
 # Batch size
