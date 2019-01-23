@@ -75,6 +75,8 @@ pars['family'] = "continuous"
 pars['p'] = p
 # List of categorical variables
 pars['cat_var_idx'] = np.arange(0, (ncat * (num_cuts)))
+# Number of discrete variables
+pars['ncat'] = ncat
 # Number of categories
 pars['num_cuts'] = num_cuts
 # Size of regularizer
