@@ -49,8 +49,8 @@ def GetTrainingHyperParams(model):
         params['LAMBDA'] = 0.01
         params['DELTA'] = 0.0001
     elif model == "mixed_student":
-        params['LAMBDA'] = 0.001
-        params['DELTA'] = 0.001
+        params['LAMBDA'] = 0.01
+        params['DELTA'] = 0.01
     else:
         raise Exception('Unknown data distribution: ' + model)
 
