@@ -59,7 +59,6 @@ second_order = gk.GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sd
 corr_g = (np.diag(SigmaHat) - np.diag(second_order.Ds)) / np.diag(SigmaHat)
 
 
-
 training_params = parameters.GetTrainingHyperParams(model)
 p = X_train.shape[1]
 
