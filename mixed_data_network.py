@@ -27,7 +27,7 @@ n = 10000
 ncat = 10
 cat_columns = np.arange(0, ncat)
 num_cuts = 4
-regularizer = 1e-1
+regularizer = 1e-4
 
 # USE THIS FOR JUST K DUMMY VARIABLES
 X_train = pd.DataFrame(DataSampler.sample(n))
@@ -73,6 +73,7 @@ pars['epoch_length'] = 100
 pars['family'] = "continuous"
 # Dimensions of the data
 pars['p'] = p
+pars['ncat'] = ncat
 # List of categorical variables
 pars['cat_var_idx'] = np.arange(0, (ncat * (num_cuts)))
 # Number of discrete variables
