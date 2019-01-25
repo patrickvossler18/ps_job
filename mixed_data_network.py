@@ -27,6 +27,7 @@ n = 10000
 ncat = 10
 cat_columns = np.arange(0, ncat)
 num_cuts = 4
+regularizer = 1e-1
 
 # USE THIS FOR JUST K DUMMY VARIABLES
 X_train = pd.DataFrame(DataSampler.sample(n))
@@ -53,7 +54,7 @@ SigmaHat = np.cov(X_train, rowvar=False)
 
 # corr_g = grid_results[1]
 # Initialize generator of second-order knockoffs
-second_order = gk.GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp", regularizer=1e-1)
+second_order = gk.GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp", regularizer=regularizer)
 
 # Measure pairwise second-order knockoff correlations
 corr_g = (np.diag(SigmaHat) - np.diag(second_order.Ds)) / np.diag(SigmaHat)
