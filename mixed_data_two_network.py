@@ -95,21 +95,14 @@ def train_network(X, p,corr_g, data_type):
     pars['target_corr'] = corr_g
     # Kernel widths for the MMD measure (uniform weights)
     pars['alphas'] = [1., 2., 4., 8., 16., 32., 64., 128.]
-
-
     # Save parameters
-    np.save('/artifacts/pars.npy', pars)
-
-
+    np.save('/artifacts/pars_'+data_type+'.npy', pars)
     # Where to store the machine
     checkpoint_name = "/artifacts/" + model +"_"+data_type
-
     # Where to print progress information
     logs_name = "/artifacts/" + model + "_progress.txt"
-
     # Initialize the machine
     machine = KnockoffMachine(pars, checkpoint_name=checkpoint_name, logs_name=logs_name)
-
     # Train the machine
     machine.train(X.values)
 
