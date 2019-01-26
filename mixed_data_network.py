@@ -27,7 +27,7 @@ n = 10000
 ncat = 10
 cat_columns = np.arange(0, ncat)
 num_cuts = 4
-regularizer = 1e-4
+regularizer = 1e-1
 
 # USE THIS FOR JUST K DUMMY VARIABLES
 X_train = pd.DataFrame(DataSampler.sample(n))
