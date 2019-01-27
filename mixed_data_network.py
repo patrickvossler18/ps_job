@@ -38,27 +38,12 @@ X_train = pd.concat([X_train_dums.reset_index(drop=True), X_train.drop(cat_colum
 SigmaHat = np.cov(X_train, rowvar=False)
 
 regularizer = np.array([1e-1]*(num_cuts*ncat)+[1e-4]*(SigmaHat.shape[1]-(num_cuts*ncat)))
-# Generate a coarse grid of regularizer values and find the smallest value that minimizes the mean absolute correlation
-# grid = np.linspace(start=0.0001,stop=0.1,num=20)
-# tol = 0.1
-# for i in range(len(grid)):
-#     second_order = gk.GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp", regularizer=grid[i])
-#     corr_g = (np.diag(SigmaHat) - np.diag(second_order.Ds)) / np.diag(SigmaHat)
-#     overall_mean = np.mean(abs(corr_g))
-#     discrete_mean = np.mean(abs(corr_g[0:num_cuts*ncat]))
-#     cont_mean = np.mean(abs(np.delete(corr_g,np.arange(0,num_cuts*ncat))))
-#     print(discrete_mean-cont_mean)
-#     if (discrete_mean-cont_mean) <= tol:
-#         grid_results = np.array([grid[i],corr_g,overall_mean,discrete_mean,cont_mean], dtype=object)
-#         break
 
-# corr_g = grid_results[1]
 # Initialize generator of second-order knockoffs
 second_order = gk.GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp", regularizer=regularizer)
 
 # Measure pairwise second-order knockoff correlations
 corr_g = (np.diag(SigmaHat) - np.diag(second_order.Ds)) / np.diag(SigmaHat)
-
 
 training_params = parameters.GetTrainingHyperParams(model)
 p = X_train.shape[1]

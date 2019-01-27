@@ -49,8 +49,8 @@ def GetTrainingHyperParams(model):
         params['LAMBDA'] = 0.01
         params['DELTA'] = 0.0001
     elif model == "mixed_student":
-        params['LAMBDA'] = 0.0001
-        params['DELTA'] = 0.00001
+        params['LAMBDA'] = 0.00001
+        params['DELTA'] =  0.00001
         # params['LAMBDA'] = 1.0
         # params['DELTA'] = 1.0
     else:
