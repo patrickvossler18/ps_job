@@ -27,7 +27,7 @@ n = 10000
 ncat = 10
 cat_columns = np.arange(0, ncat)
 num_cuts = 4
-regularizer = 1e-1
+
 
 # USE THIS FOR JUST K DUMMY VARIABLES
 X_train = pd.DataFrame(DataSampler.sample(n))
@@ -37,7 +37,7 @@ X_train = pd.concat([X_train_dums.reset_index(drop=True), X_train.drop(cat_colum
 
 SigmaHat = np.cov(X_train, rowvar=False)
 
-
+regularizer = np.array([1e-1]*(num_cuts*ncat)+[1e-4]*(SigmaHat.shape[1]-(num_cuts*ncat)))
 # Generate a coarse grid of regularizer values and find the smallest value that minimizes the mean absolute correlation
 # grid = np.linspace(start=0.0001,stop=0.1,num=20)
 # tol = 0.1
