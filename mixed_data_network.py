@@ -23,8 +23,8 @@ distribution_params = parameters.GetDistributionParams(model, p)
 DataSampler = data.DataSampler(distribution_params)
 
 # Number of training examples
-n = 5000
-ncat = 20
+n = 1000
+ncat = 10
 cat_columns = np.arange(0, ncat)
 num_cuts = 4
 
