@@ -35,6 +35,9 @@ X_train.iloc[:, cat_columns] = X_train.iloc[:, cat_columns].apply(lambda x: pd.q
 X_train_dums = pd.get_dummies(X_train.iloc[:, cat_columns], prefix=X_train.iloc[:, cat_columns].columns.values.astype(str).tolist())
 X_train = pd.concat([X_train_dums.reset_index(drop=True), X_train.drop(cat_columns, axis=1).reset_index(drop=True)], axis=1)
 
+#z-score normalization
+X_train = (X_train - X_train.mean())/X_train.std()
+
 SigmaHat = np.cov(X_train, rowvar=False)
 
 regularizer = np.array([1e-1]*(num_cuts*ncat)+[1e-4]*(SigmaHat.shape[1]-(num_cuts*ncat)))
