@@ -36,11 +36,11 @@ X_train_dums = pd.get_dummies(X_train.iloc[:, cat_columns], prefix=X_train.iloc[
 X_train = pd.concat([X_train_dums.reset_index(drop=True), X_train.drop(cat_columns, axis=1).reset_index(drop=True)], axis=1)
 
 #z-score normalization
-X_train = (X_train - X_train.mean())/X_train.std()
+# X_train = (X_train - X_train.mean())/X_train.std()
 
 SigmaHat = np.cov(X_train, rowvar=False)
 
-regularizer = np.array([1e-1]*(num_cuts*ncat)+[1e-4]*(SigmaHat.shape[1]-(num_cuts*ncat)))
+regularizer = np.array([1e-1]*(num_cuts*ncat)+[0]*(SigmaHat.shape[1]-(num_cuts*ncat)))
 
 # Initialize generator of second-order knockoffs
 second_order = gk.GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp", regularizer=regularizer)
@@ -74,9 +74,9 @@ pars['num_cuts'] = num_cuts
 # Size of regularizer
 # pars['regularizer'] = grid_results[0]
 # Boolean for using different weighting structure for decorr
-pars['use_weighting'] = False
+pars['use_weighting'] = True
 # Multiplier for weighting discrete variables
-pars['kappa'] = 50
+pars['kappa'] = 1
 # Size of the test set
 pars['test_size'] = 0
 # Batch size
