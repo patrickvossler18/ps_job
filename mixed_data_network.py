@@ -77,6 +77,8 @@ pars['num_cuts'] = num_cuts
 pars['use_weighting'] = False
 # Multiplier for weighting discrete variables
 pars['kappa'] = 1
+# Boolean for using the different decorr loss function from the paper
+pars['diff_decorr'] = True
 # Size of the test set
 pars['test_size'] = 0
 # Batch size
