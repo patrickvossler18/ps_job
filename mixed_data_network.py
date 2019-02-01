@@ -40,7 +40,7 @@ X_train = pd.concat([X_train_dums.reset_index(drop=True), X_train.drop(cat_colum
 
 SigmaHat = np.cov(X_train, rowvar=False)
 
-regularizer = np.array([1e-1]*(num_cuts*ncat)+[0]*(SigmaHat.shape[1]-(num_cuts*ncat)))
+regularizer = np.array([1e-1]*(num_cuts*ncat)+[1e-1]*(SigmaHat.shape[1]-(num_cuts*ncat)))
 
 # Initialize generator of second-order knockoffs
 second_order = gk.GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp", regularizer=regularizer)
@@ -78,7 +78,7 @@ pars['use_weighting'] = False
 # Multiplier for weighting discrete variables
 pars['kappa'] = 1
 # Boolean for using the different decorr loss function from the paper
-pars['diff_decorr'] = True
+pars['diff_decorr'] = False
 # Size of the test set
 pars['test_size'] = 0
 # Batch size
@@ -100,6 +100,8 @@ pars['target_corr'] = corr_g
 # Kernel widths for the MMD measure (uniform weights)
 pars['alphas'] = [1., 2., 4., 8., 16., 32., 64., 128.]
 
+# machine = KnockoffMachine(pars)
+# machine.train(X_train.values)
 
 # Save parameters
 np.save('/artifacts/pars.npy', pars)
