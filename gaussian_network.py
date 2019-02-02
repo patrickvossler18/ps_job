@@ -1,8 +1,6 @@
 import numpy as np
-import pandas as pd
 from DeepKnockoffs import KnockoffMachine
-# from DeepKnockoffs import GaussianKnockoffs
-import gk
+from DeepKnockoffs import GaussianKnockoffs
 import data
 import parameters
 
@@ -15,8 +13,7 @@ p = 50
 # - gmm      : Gaussian mixture model
 # - mstudent : Multivariate Student's-t distribution
 # - sparse   : Multivariate sparse Gaussian distribution
-model = "mixed_student"
-# model = "mixed"
+model = "gaussian"
 distribution_params = parameters.GetDistributionParams(model, p)
 
 # Initialize the data generator
@@ -24,32 +21,31 @@ DataSampler = data.DataSampler(distribution_params)
 
 # Number of training examples
 n = 1000
-ncat = 10
+
+# not used but included in dictionary
+ncat = p/2
 cat_columns = np.arange(0, ncat)
 num_cuts = 4
 
-
-# USE THIS FOR JUST K DUMMY VARIABLES
-X_train = pd.DataFrame(DataSampler.sample(n))
-X_train.iloc[:, cat_columns] = X_train.iloc[:, cat_columns].apply(lambda x: pd.qcut(x, 4, retbins=False, labels=False), axis=0).astype(str)
-X_train_dums = pd.get_dummies(X_train.iloc[:, cat_columns], prefix=X_train.iloc[:, cat_columns].columns.values.astype(str).tolist())
-X_train = pd.concat([X_train_dums.reset_index(drop=True), X_train.drop(cat_columns, axis=1).reset_index(drop=True)], axis=1)
-
+# Sample training data
+X_train = DataSampler.sample(n)
 
 SigmaHat = np.cov(X_train, rowvar=False)
 
-regularizer = np.array([1e-1]*(num_cuts*ncat)+[0]*(SigmaHat.shape[1]-(num_cuts*ncat)))
+# TO USE LATER
+# regularizer = np.array([1e-1]*(num_cuts*ncat)+[0]*(SigmaHat.shape[1]-(num_cuts*ncat)))
+# # Initialize generator of second-order knockoffs
+# second_order = gk.GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp", regularizer=regularizer)
+
 # Initialize generator of second-order knockoffs
-second_order = gk.GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp", regularizer=regularizer)
+second_order = GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp")
 
 # Measure pairwise second-order knockoff correlations
 corr_g = (np.diag(SigmaHat) - np.diag(second_order.Ds)) / np.diag(SigmaHat)
 
-print(np.average(corr_g))
-print(np.average(corr_g[1:40]))
-print(np.average(corr_g[40:80]))
 
 training_params = parameters.GetTrainingHyperParams(model)
+
 p = X_train.shape[1]
 
 # Set the parameters for training deep knockoffs
@@ -98,12 +94,9 @@ pars['target_corr'] = corr_g
 # Kernel widths for the MMD measure (uniform weights)
 pars['alphas'] = [1., 2., 4., 8., 16., 32., 64., 128.]
 
-# machine = KnockoffMachine(pars)
-# machine.train(X_train.values)
 
 # Save parameters
 np.save('/artifacts/pars.npy', pars)
-
 
 # Where to store the machine
 checkpoint_name = "/artifacts/" + model
@@ -115,4 +108,4 @@ logs_name = "/artifacts/" + model + "_progress.txt"
 machine = KnockoffMachine(pars, checkpoint_name=checkpoint_name, logs_name=logs_name)
 
 # Train the machine
-machine.train(X_train.values)
+machine.train(X_train)

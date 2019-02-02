@@ -6,4 +6,5 @@
 
 # cd ..
 # pwd
-python3 student_t_network.py
+# python3 student_t_network.py
+python3 gaussia_network.py
