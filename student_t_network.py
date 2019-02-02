@@ -1,6 +1,8 @@
 import numpy as np
+import pandas as pd
 from DeepKnockoffs import KnockoffMachine
 from DeepKnockoffs import GaussianKnockoffs
+# import gk
 import data
 import parameters
 
@@ -23,7 +25,7 @@ DataSampler = data.DataSampler(distribution_params)
 n = 1000
 
 # not used but included in dictionary
-ncat = p/2
+ncat = int(p/2)
 cat_columns = np.arange(0, ncat)
 num_cuts = 4
 
@@ -33,7 +35,7 @@ X_train = DataSampler.sample(n)
 SigmaHat = np.cov(X_train, rowvar=False)
 
 # TO USE LATER
-# regularizer = np.array([1e-1]*(num_cuts*ncat)+[0]*(SigmaHat.shape[1]-(num_cuts*ncat)))
+# regularizer = np.array([1e-1]*(num_cuts*ncat)+[1e-1]*(SigmaHat.shape[1]-(num_cuts*ncat)))
 # # Initialize generator of second-order knockoffs
 # second_order = gk.GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp", regularizer=regularizer)
 
