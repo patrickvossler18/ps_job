@@ -20,12 +20,22 @@ distribution_params = parameters.GetDistributionParams(model, p)
 DataSampler = data.DataSampler(distribution_params)
 
 # Number of training examples
-n = 10000
+n = 1000
+
+# not used but included in dictionary
+ncat = p/2
+cat_columns = np.arange(0, ncat)
+num_cuts = 4
 
 # Sample training data
 X_train = DataSampler.sample(n)
 
 SigmaHat = np.cov(X_train, rowvar=False)
+
+# TO USE LATER
+# regularizer = np.array([1e-1]*(num_cuts*ncat)+[0]*(SigmaHat.shape[1]-(num_cuts*ncat)))
+# # Initialize generator of second-order knockoffs
+# second_order = gk.GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp", regularizer=regularizer)
 
 # Initialize generator of second-order knockoffs
 second_order = GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp")
@@ -35,6 +45,8 @@ corr_g = (np.diag(SigmaHat) - np.diag(second_order.Ds)) / np.diag(SigmaHat)
 
 
 training_params = parameters.GetTrainingHyperParams(model)
+
+p = X_train.shape[1]
 
 # Set the parameters for training deep knockoffs
 pars = dict()
@@ -46,6 +58,21 @@ pars['epoch_length'] = 100
 pars['family'] = "continuous"
 # Dimensions of the data
 pars['p'] = p
+pars['ncat'] = ncat
+# List of categorical variables
+pars['cat_var_idx'] = np.arange(0, (ncat * (num_cuts)))
+# Number of discrete variables
+pars['ncat'] = ncat
+# Number of categories
+pars['num_cuts'] = num_cuts
+# Size of regularizer
+# pars['regularizer'] = grid_results[0]
+# Boolean for using different weighting structure for decorr
+pars['use_weighting'] = False
+# Multiplier for weighting discrete variables
+pars['kappa'] = 1
+# Boolean for using the different decorr loss function from the paper
+pars['diff_decorr'] = False
 # Size of the test set
 pars['test_size'] = 0
 # Batch size
