@@ -10,7 +10,7 @@ def GetDistributionParams(model, p):
     elif model == "gmm":
         params["rho-list"] = [0.3, 0.5, 0.7]
     elif model == "mstudent":
-        params["df"] = 10
+        params["df"] = 3
         params["rho"] = 0.5
     elif model == "mixed_student":
         params["df"] = 10
@@ -40,10 +40,8 @@ def GetTrainingHyperParams(model):
         params['LAMBDA'] = 1.0
         params['DELTA'] = 1.0
     elif model == "mstudent":
-        # params['LAMBDA'] = 0.01
-        # params['DELTA'] = 0.01
-        params['LAMBDA'] = 1.0
-        params['DELTA'] = 1.0
+        params['LAMBDA'] = 0.01
+        params['DELTA'] = 0.01
     elif model == "sparse":
         params['LAMBDA'] = 0.1
         params['DELTA'] = 1.0
