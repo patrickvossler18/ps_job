@@ -5,7 +5,7 @@ import data
 import parameters
 
 # Number of features
-p = 50
+p = 100
 
 # Load the built-in multivariate Student's-t model and its default parameters
 # The currently available built-in models are:
