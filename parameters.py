@@ -10,7 +10,7 @@ def GetDistributionParams(model, p):
     elif model == "gmm":
         params["rho-list"] = [0.3, 0.5, 0.7]
     elif model == "mstudent":
-        params["df"] = 10
+        params["df"] = 25
         params["rho"] = 0.5
     elif model == "mixed_student":
         params["df"] = 10
