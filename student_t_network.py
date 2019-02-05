@@ -71,6 +71,8 @@ pars['num_cuts'] = num_cuts
 # pars['regularizer'] = grid_results[0]
 # Boolean for using different weighting structure for decorr
 pars['use_weighting'] = False
+# Boolean for using mixed data in forward function
+pars['mixed_data'] = False
 # Multiplier for weighting discrete variables
 pars['kappa'] = 1
 # Boolean for using the different decorr loss function from the paper

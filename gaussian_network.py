@@ -73,6 +73,8 @@ pars['use_weighting'] = False
 pars['kappa'] = 1
 # Boolean for using the different decorr loss function from the paper
 pars['diff_decorr'] = False
+# Boolean for using mixed data in forward function
+pars['mixed_data'] = False
 # Size of the test set
 pars['test_size'] = 0
 # Batch size
