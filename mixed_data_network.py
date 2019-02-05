@@ -15,7 +15,7 @@ p = 50
 # - gmm      : Gaussian mixture model
 # - mstudent : Multivariate Student's-t distribution
 # - sparse   : Multivariate sparse Gaussian distribution
-model = "gaussian"
+model = "mixed_student"
 # model = "mixed"
 distribution_params = parameters.GetDistributionParams(model, p)
 
@@ -24,7 +24,7 @@ DataSampler = data.DataSampler(distribution_params)
 
 # Number of training examples
 n = 1000
-ncat = p/2
+ncat = int(p/2)
 cat_columns = np.arange(0, ncat)
 num_cuts = 4
 
