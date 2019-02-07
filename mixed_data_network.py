@@ -37,13 +37,14 @@ X_train_dums = pd.get_dummies(X_train.iloc[:, cat_columns], prefix=X_train.iloc[
 X_train = pd.concat([X_train_dums.reset_index(drop=True), X_train.drop(cat_columns, axis=1).reset_index(drop=True)], axis=1)
 
 
-SigmaHat = np.cov(X_train, rowvar=False)
+# SigmaHat = np.cov(X_train, rowvar=False)
 mcd = MinCovDet().fit(X_train)
 SigmaHat_mcd = mcd.covariance_ 
 
 # regularizer = np.array([1e-4]*(num_cuts*ncat)+[1e-4]*(SigmaHat.shape[1]-(num_cuts*ncat)))
 # Initialize generator of second-order knockoffs
 second_order = gk.GaussianKnockoffs(SigmaHat_mcd, mu=np.mean(X_train, 0), method="sdp", regularizer=1e-1)
+# second_order = gk.GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp", regularizer=1e-1)
 
 # Measure pairwise second-order knockoff correlations
 corr_g = (np.diag(SigmaHat) - np.diag(second_order.Ds)) / np.diag(SigmaHat)
