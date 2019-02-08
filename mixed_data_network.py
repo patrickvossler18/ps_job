@@ -43,14 +43,14 @@ SigmaHat = np.cov(X_train, rowvar=False)
 # regularizer = np.array([1e-4]*(num_cuts*ncat)+[1e-4]*(SigmaHat.shape[1]-(num_cuts*ncat)))
 # Initialize generator of second-order knockoffs
 
-second_order = gk.GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp", regularizer=1e-1)
+second_order = gk.GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp", regularizer=2e-1)
 
 # Measure pairwise second-order knockoff correlations
 corr_g = (np.diag(SigmaHat) - np.diag(second_order.Ds)) / np.diag(SigmaHat)
 
 print(np.average(corr_g))
 print(np.average(corr_g[1:(num_cuts*ncat)]))
-print(np.average(corr_g[((num_cuts*ncat)+1):250]))
+print(np.average(corr_g[((num_cuts*ncat)+1):((num_cuts*ncat)+ int(p/2))]))
 
 training_params = parameters.GetTrainingHyperParams(model)
 p = X_train.shape[1]

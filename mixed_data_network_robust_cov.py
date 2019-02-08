@@ -5,13 +5,13 @@ import pandas as pd
 import gk
 import data
 import parameters
-from sklearn.covariance import MinCovDet
-from rpy2.robjects import pandas2ri
-from rpy2.robjects.packages import importr
-pandas2ri.activate()
-base = importr('base')
-stats = importr('stats')
-fastM = importr('fastM')
+from sklearn.covariance import MinCovDet,LedoitWolf
+# from rpy2.robjects import pandas2ri
+# from rpy2.robjects.packages import importr
+# pandas2ri.activate()
+# base = importr('base')
+# stats = importr('stats')
+# fastM = importr('fastM')
 
 
 # Number of features
@@ -43,25 +43,28 @@ X_train.iloc[:, cat_columns] = X_train.iloc[:, cat_columns].apply(lambda x: pd.q
 X_train_dums = pd.get_dummies(X_train.iloc[:, cat_columns], prefix=X_train.iloc[:, cat_columns].columns.values.astype(str).tolist())
 X_train = pd.concat([X_train_dums.reset_index(drop=True), X_train.drop(cat_columns, axis=1).reset_index(drop=True)], axis=1)
 
-X_train = X_train.astype('int64')
+# X_train = X_train.astype('int64')
 
-SigmaHatM = np.array(fastM.MVTMLE(X=X_train,location=False).rx2('Sigma'))
-# SigmaHat = np.cov(X_train, rowvar=False)
+# SigmaHatM = np.array(fastM.MVTMLE(X=X_train,location=False).rx2('Sigma'))
+SigmaHat = np.cov(X_train, rowvar=False)
 # mcd = MinCovDet().fit(X_train)
+lw = LedoitWolf().fit(X_train)
 # SigmaHat_mcd = mcd.covariance_ 
+SigmaHat_lw = lw.covariance_
 
 # regularizer = np.array([1e-4]*(num_cuts*ncat)+[1e-4]*(SigmaHat.shape[1]-(num_cuts*ncat)))
 # Initialize generator of second-order knockoffs
-second_order = gk.GaussianKnockoffs(SigmaHatM, mu=np.mean(X_train, 0), method="sdp", regularizer=1e-1)
+# second_order = gk.GaussianKnockoffs(SigmaHat_lw, mu=np.mean(X_train, 0), method="sdp", regularizer=1e-1)
+second_order = gk.GaussianKnockoffs(SigmaHat_lw, mu=np.mean(X_train, 0), method="sdp", regularizer=1e-4)
 # second_order = gk.GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp", regularizer=1e-1)
 
 # Measure pairwise second-order knockoff correlations
 # corr_g = (np.diag(SigmaHat) - np.diag(second_order.Ds)) / np.diag(SigmaHat)
-corr_g = (np.diag(SigmaHat_mcd) - np.diag(second_order.Ds)) / np.diag(SigmaHat_mcd)
+corr_g = (np.diag(SigmaHat_lw) - np.diag(second_order.Ds)) / np.diag(SigmaHat_lw)
 
 print(np.average(corr_g))
-print(np.average(corr_g[1:40]))
-print(np.average(corr_g[40:80]))
+print(np.average(corr_g[1:(num_cuts*ncat)]))
+print(np.average(corr_g[((num_cuts*ncat)+1):((num_cuts*ncat)+ int(p/2))]))
 
 training_params = parameters.GetTrainingHyperParams(model)
 p = X_train.shape[1]
