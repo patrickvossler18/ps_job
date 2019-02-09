@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-# from DeepKnockoffs import KnockoffMachine
+from DeepKnockoffs import KnockoffMachine
 # from DeepKnockoffs import GaussianKnockoffs
 import gk
 import data
