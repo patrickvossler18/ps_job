@@ -5,6 +5,7 @@ from DeepKnockoffs import KnockoffMachine
 import gk
 import data
 import parameters
+from sklearn.covariance import MinCovDet, LedoitWolf
 
 # Number of features
 p = 100
