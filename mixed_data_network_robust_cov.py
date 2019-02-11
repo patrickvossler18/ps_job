@@ -5,7 +5,7 @@ from DeepKnockoffs import KnockoffMachine
 import gk
 import data
 import parameters
-from sklearn.covariance import MinCovDet,LedoitWolf
+from sklearn.covariance import MinCovDet, LedoitWolf
 # from rpy2.robjects import pandas2ri
 # from rpy2.robjects.packages import importr
 # pandas2ri.activate()
@@ -46,21 +46,22 @@ X_train = pd.concat([X_train_dums.reset_index(drop=True), X_train.drop(cat_colum
 # X_train = X_train.astype('int64')
 
 # SigmaHatM = np.array(fastM.MVTMLE(X=X_train,location=False).rx2('Sigma'))
-SigmaHat = np.cov(X_train, rowvar=False)
-# mcd = MinCovDet().fit(X_train)
-lw = LedoitWolf().fit(X_train)
-# SigmaHat_mcd = mcd.covariance_ 
-SigmaHat_lw = lw.covariance_
+# SigmaHat = np.cov(X_train, rowvar=False)
+mcd = MinCovDet().fit(X_train)
+SigmaHat_mcd = mcd.covariance_ 
+# lw = LedoitWolf().fit(X_train)
+# SigmaHat_lw = lw.covariance_
+# SigmaHat_chen = chen_covariance(X_train,SigmaHat)
 
 # regularizer = np.array([1e-4]*(num_cuts*ncat)+[1e-4]*(SigmaHat.shape[1]-(num_cuts*ncat)))
 # Initialize generator of second-order knockoffs
 # second_order = gk.GaussianKnockoffs(SigmaHat_lw, mu=np.mean(X_train, 0), method="sdp", regularizer=1e-1)
-second_order = gk.GaussianKnockoffs(SigmaHat_lw, mu=np.mean(X_train, 0), method="sdp", regularizer=1e-4)
+second_order = gk.GaussianKnockoffs(SigmaHat_mcd, mu=np.mean(X_train, 0), method="sdp", regularizer=1e-1)
 # second_order = gk.GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp", regularizer=1e-1)
 
 # Measure pairwise second-order knockoff correlations
 # corr_g = (np.diag(SigmaHat) - np.diag(second_order.Ds)) / np.diag(SigmaHat)
-corr_g = (np.diag(SigmaHat_lw) - np.diag(second_order.Ds)) / np.diag(SigmaHat_lw)
+corr_g = (np.diag(SigmaHat_mcd) - np.diag(second_order.Ds)) / np.diag(SigmaHat_mcd)
 
 print(np.average(corr_g))
 print(np.average(corr_g[1:(num_cuts*ncat)]))
