@@ -15,7 +15,7 @@ from sklearn.covariance import MinCovDet, LedoitWolf
 
 
 # Number of features
-p = 50
+p = 100
 
 # Load the built-in multivariate Student's-t model and its default parameters
 # The currently available built-in models are:
@@ -128,10 +128,12 @@ for combo in param_combos:
     # machine = KnockoffMachine(pars)
     # machine.train(X_train.values)
 
+    par_lambda = str(np.round(combo[0],4))
+    par_delta = str(np.round(combo[1],4))
     # Save parameters
-    np.save('/artifacts/pars' + "_" + str(combo[0]) + "_" + str(combo[1])+'.npy', pars)
+    np.save('/artifacts/pars' + "_" + par_lambda + "_" + par_delta+'.npy', pars)
 
-    model = model + "_" + str(combo[0]) + "_" + str(combo[1])
+    model = model + "_" + par_lambda + "_" + par_delta
 
     # Where to store the machine
     checkpoint_name = "/artifacts/" + model
