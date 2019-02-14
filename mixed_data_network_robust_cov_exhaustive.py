@@ -24,7 +24,7 @@ p = 100
 # - mstudent : Multivariate Student's-t distribution
 # - sparse   : Multivariate sparse Gaussian distribution
 # model = "mixed_student"
-model = "mixed_student"
+model = "mixed"
 distribution_params = parameters.GetDistributionParams(model, p)
 
 # Initialize the data generator
@@ -75,7 +75,7 @@ b = np.linspace(0.01,0.001,num=5)
 param_combos = [(x,y) for x in a for y in b]
 
 for combo in param_combos:
-    model = "mixed_student"
+    model = "mixed"
     print(combo)
     # Set the parameters for training deep knockoffs
     pars = dict()
