@@ -15,7 +15,7 @@ from sklearn.covariance import MinCovDet, LedoitWolf
 
 
 # Number of features
-p = 50
+p = 100
 
 # Load the built-in multivariate Student's-t model and its default parameters
 # The currently available built-in models are:
@@ -24,7 +24,7 @@ p = 50
 # - mstudent : Multivariate Student's-t distribution
 # - sparse   : Multivariate sparse Gaussian distribution
 # model = "mixed_student"
-model = "mixed_student"
+model = "mixed"
 distribution_params = parameters.GetDistributionParams(model, p)
 
 # Initialize the data generator
