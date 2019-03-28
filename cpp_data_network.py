@@ -33,11 +33,12 @@ X_new = X
 chunk_list = []
 for factor in factor_list:
     # expand the variable
-    expanded = pd.get_dummies(data=X[factor])
+    expanded = pd.get_dummies(data=X[factor],drop_first=True)
     # count how many columns
     chunks = expanded.shape[1]
     chunk_list.append(chunks)
     X_new = pd.concat([X_new, expanded], axis=1)
+
 
 X_new = X_new.drop(columns = factor_list)
 
@@ -46,11 +47,12 @@ cat_var_idx = np.arange(cat_start,X_new.shape[1])
 
 # Split train test 80-20 and save index of train data for later
 X_train = X_new.sample(frac=0.8,random_state=200)
-np.savetxt("/artifacts/train_msk.csv", X_train.index, delimiter=",")
+# np.savetxt("/artifacts/train_msk.csv", X_train.index, delimiter=",")
 
 # Regularize the covariance and generate second order knockoffs
-mcd = MinCovDet().fit(X_train)
-SigmaHat_mcd = mcd.covariance_ 
+# mcd = LedoitWolf().fit(X_train)
+# SigmaHat_mcd = mcd.covariance_ 
+SigmaHat_mcd = np.cov(X_train, rowvar=False)
 second_order = gk.GaussianKnockoffs(SigmaHat_mcd, mu=np.mean(X_train, 0), method="sdp", regularizer=0.01)
 corr_g = (np.diag(SigmaHat_mcd) - np.diag(second_order.Ds)) / np.diag(SigmaHat_mcd)
 
