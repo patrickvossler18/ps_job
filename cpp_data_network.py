@@ -47,7 +47,7 @@ cat_var_idx = np.arange(cat_start,X_new.shape[1])
 
 # Split train test 80-20 and save index of train data for later
 X_train = X_new.sample(frac=0.8,random_state=200)
-# np.savetxt("/artifacts/train_msk.csv", X_train.index, delimiter=",")
+np.savetxt("/artifacts/train_msk.csv", X_train.index, delimiter=",")
 
 # Regularize the covariance and generate second order knockoffs
 # mcd = LedoitWolf().fit(X_train)
