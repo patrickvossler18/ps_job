@@ -33,7 +33,7 @@ X_new = X
 chunk_list = []
 for factor in factor_list:
     # expand the variable
-    expanded = pd.get_dummies(data=X[factor],drop_first=True)
+    expanded = pd.get_dummies(data=X[factor])
     # count how many columns
     chunks = expanded.shape[1]
     chunk_list.append(chunks)
