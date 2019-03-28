@@ -33,7 +33,8 @@ def solve_sdp(Sigma, tol=1e-3, regularizer=1e-4):
     objective = cvx.Maximize(sum(s))
     constraints = [2.0*corrMatrix >> cvx.diag(s) + cvx.diag([tol]*p), 0 <= s, s <= 1]
     prob = cvx.Problem(objective, constraints)
-    prob.solve(solver='CVXOPT')
+    # prob.solve(solver='CVXOPT')
+    prob.solve(solver='SCS')
     # assert prob.status == cvx.OPTIMAL
     # print(prob.status)
     s = np.clip(np.asarray(s.value).flatten(), 0, 1)
