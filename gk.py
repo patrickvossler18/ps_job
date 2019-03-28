@@ -36,7 +36,7 @@ def solve_sdp(Sigma, tol=1e-3, regularizer=1e-4):
     # prob.solve(solver='CVXOPT')
     prob.solve(solver='SCS')
     # assert prob.status == cvx.OPTIMAL
-    # print(prob.status)
+    print(prob.status)
     s = np.clip(np.asarray(s.value).flatten(), 0, 1)
     # Scale back the results for a covariance matrix
     return np.multiply(s, np.diag(Sigma))
