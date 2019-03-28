@@ -2,70 +2,55 @@ import numpy as np
 import pandas as pd
 from DeepKnockoffs import KnockoffMachine
 from DeepKnockoffs import GaussianKnockoffs
+import gk
 import data
 import parameters
+from sklearn.covariance import MinCovDet
 
 # Number of features
-p = 50
+p = 100
 
 # Load the built-in multivariate Student's-t model and its default parameters
 # The currently available built-in models are:
 # - gaussian : Multivariate Gaussian distribution
 # - gmm      : Gaussian mixture model
 # - mstudent : Multivariate Student's-t distribution
-# - sparse   : Multivariate sparse Gaussian distribution 
-model = "gaussian"
+# - sparse   : Multivariate sparse Gaussian distribution
+# model = "mixed_student"
+model = "mixed"
 distribution_params = parameters.GetDistributionParams(model, p)
 
 # Initialize the data generator
 DataSampler = data.DataSampler(distribution_params)
 
 # Number of training examples
-n = 10000
-ncat = 10
-cat_columns = np.arange(0,ncat)
+n = 1000
+ncat = int(p/2)
+cat_columns = np.arange(0, ncat)
 num_cuts = 4
 
-# Sample training data
-# X_train = pd.DataFrame(DataSampler.sample(n))
-# X_train.iloc[:,cat_columns] = X_train.iloc[:,cat_columns].apply(lambda x: pd.qcut(x, 4, retbins=False,labels=False), axis=0)
-# obs_logits = X_train.iloc[:,cat_columns].apply(lambda x: x.value_counts(normalize=True), axis=0)
 
-# logits_list = [obs_logits for i in range(0,n)]
-
-# for j in range(len(logits_list)):
-#     if j % 1000 == 0:
-#         print(j)
-#     a = logits_list[j].apply(lambda x: gumbel_softmax_sample(torch.FloatTensor(x.apply(np.log)),0.8)).unstack()
-#     res = pd.concat([pd.DataFrame(a[i]).T.reset_index().drop(['index'],axis=1) for i in cat_columns ], axis = 1)
-#     logits_list[j] = res
-
-# logits_df = pd.concat(logits_list)
-# X_train_cont = X_train.drop(cat_columns,axis=1)
-# X_train = pd.concat([logits_df.reset_index(drop=True),X_train_cont.reset_index(drop=True) ], axis=1)
-# res = pd.concat([pd.DataFrame(a[i]).T.reset_index().drop(['index'],axis=1) for i in range(0,num_cuts) ], axis = 0)
-# Variable(torch.FloatTensor([[math.log(0.1), math.log(0.4), math.log(0.3), math.log(0.2)]] * 20000))
-# Make the columns into categorical variables
-
-## USE THIS FOR THE K-1 DUMMY VARIABLE TEST
+# USE THIS FOR JUST K DUMMY VARIABLES
 X_train = pd.DataFrame(DataSampler.sample(n))
-X_train.iloc[:,cat_columns] = X_train.iloc[:,cat_columns].apply(lambda x: pd.qcut(x, 4, retbins=False,labels=False), axis=0).astype(str)
-X_train_dums = pd.get_dummies(X_train.iloc[:,cat_columns],drop_first=True, prefix= X_train.iloc[:,cat_columns].columns.values.astype(str).tolist())
-X_train = pd.concat([X_train_dums.reset_index(drop=True),X_train.drop(cat_columns,axis = 1).reset_index(drop=True)], axis=1)
-
-# Use the observed frequencies of the different categorical values as the probabilities for the observed distribution
-# Generate gumbel-softmax samples using these observed probabilities (do this for each row or for all of the data?)
-# Replace the observed discrete values with the sampled values and run the network with these 
+X_train.iloc[:, cat_columns] = X_train.iloc[:, cat_columns].apply(lambda x: pd.qcut(x, 4, retbins=False, labels=False), axis=0).astype(str)
+X_train_dums = pd.get_dummies(X_train.iloc[:, cat_columns], prefix=X_train.iloc[:, cat_columns].columns.values.astype(str).tolist())
+X_train = pd.concat([X_train_dums.reset_index(drop=True), X_train.drop(cat_columns, axis=1).reset_index(drop=True)], axis=1)
 
 
 SigmaHat = np.cov(X_train, rowvar=False)
+ 
 
+# regularizer = np.array([1e-4]*(num_cuts*ncat)+[1e-4]*(SigmaHat.shape[1]-(num_cuts*ncat)))
 # Initialize generator of second-order knockoffs
-second_order = GaussianKnockoffs(SigmaHat, mu=np.mean(X_train,0), method="sdp")
 
-# Measure pairwise second-order knockoff correlations 
+second_order = gk.GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp", regularizer=1e-1)
+
+# Measure pairwise second-order knockoff correlations
 corr_g = (np.diag(SigmaHat) - np.diag(second_order.Ds)) / np.diag(SigmaHat)
 
+print(np.average(corr_g))
+print(np.average(corr_g[1:(num_cuts*ncat)]))
+print(np.average(corr_g[((num_cuts*ncat)+1):((num_cuts*ncat)+ int(p/2))]))
 
 training_params = parameters.GetTrainingHyperParams(model)
 p = X_train.shape[1]
@@ -80,8 +65,25 @@ pars['epoch_length'] = 100
 pars['family'] = "continuous"
 # Dimensions of the data
 pars['p'] = p
+pars['ncat'] = ncat
+# List of categorical variables
+pars['cat_var_idx'] = np.arange(0, (ncat * (num_cuts)))
+# Number of discrete variables
+pars['ncat'] = ncat
+# Number of categories
+pars['num_cuts'] = num_cuts
+# Size of regularizer
+# pars['regularizer'] = grid_results[0]
+# Boolean for using different weighting structure for decorr
+pars['use_weighting'] = False
+# Multiplier for weighting discrete variables
+pars['kappa'] = 1
+# Boolean for using the different decorr loss function from the paper
+pars['diff_decorr'] = False
+# Boolean for using mixed data in forward function
+pars['mixed_data'] = True
 # Size of the test set
-pars['test_size']  = 0
+pars['test_size'] = 0
 # Batch size
 pars['batch_size'] = int(0.5*n)
 # Learning rate
@@ -99,8 +101,10 @@ pars['DELTA'] = training_params['DELTA']
 # Target pairwise correlations between variables and knockoffs
 pars['target_corr'] = corr_g
 # Kernel widths for the MMD measure (uniform weights)
-pars['alphas'] = [1.,2.,4.,8.,16.,32.,64.,128.]
+pars['alphas'] = [1., 2., 4., 8., 16., 32., 64., 128.]
 
+# machine = KnockoffMachine(pars)
+# machine.train(X_train.values)
 
 # Save parameters
 np.save('/artifacts/pars.npy', pars)

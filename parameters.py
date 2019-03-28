@@ -1,4 +1,4 @@
-def GetDistributionParams(model,p):
+def GetDistributionParams(model, p):
     """
     Returns parameters for generating different data distributions
     """
@@ -8,24 +8,30 @@ def GetDistributionParams(model,p):
     if model == "gaussian":
         params["rho"] = 0.5
     elif model == "gmm":
-        params["rho-list"] = [0.3,0.5,0.7]
+        params["rho-list"] = [0.3, 0.5, 0.7]
     elif model == "mstudent":
         params["df"] = 10
+        params["rho"] = 0.5
+    elif model == "mixed_student":
+        params["df"] = 10
+        params["rho"] = 0.5
+    elif model == "mixed":
         params["rho"] = 0.5
     elif model == "sparse":
         params["sparsity"] = int(0.3*p)
     else:
         raise Exception('Unknown model generating distribution: ' + model)
-    
+
     return params
-        
+
+
 def GetTrainingHyperParams(model):
     """
     Returns the default hyperparameters for training deep knockoffs
     as described in the paper
     """
     params = dict()
-    
+
     params['GAMMA'] = 1.0
     if model == "gaussian":
         params['LAMBDA'] = 1.0
@@ -39,10 +45,21 @@ def GetTrainingHyperParams(model):
     elif model == "sparse":
         params['LAMBDA'] = 0.1
         params['DELTA'] = 1.0
+    elif model == "mixed":
+        # params['LAMBDA'] = 0.01
+        # params['DELTA'] = 0.005
+        params['LAMBDA'] = 0.00324
+        params['DELTA'] = 0.01
+    elif model == "mixed_student":
+        params['LAMBDA'] = 0.01
+        params['DELTA'] = 0.01
+        # params['LAMBDA'] = 1.0
+        # params['DELTA'] = 1.0
     else:
         raise Exception('Unknown data distribution: ' + model)
-        
+
     return params
+
 
 def GetFDRTestParams(model):
     """
@@ -60,5 +77,5 @@ def GetFDRTestParams(model):
     elif model in ["sparse"]:
         params["n"] = 200
         params["elasticnet_alpha"] = 0.0
-    
+
     return params

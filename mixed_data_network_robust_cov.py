@@ -6,9 +6,16 @@ import gk
 import data
 import parameters
 from sklearn.covariance import MinCovDet, LedoitWolf
+# from rpy2.robjects import pandas2ri
+# from rpy2.robjects.packages import importr
+# pandas2ri.activate()
+# base = importr('base')
+# stats = importr('stats')
+# fastM = importr('fastM')
+
 
 # Number of features
-p = 200
+p = 100
 
 # Load the built-in multivariate Student's-t model and its default parameters
 # The currently available built-in models are:
@@ -16,7 +23,8 @@ p = 200
 # - gmm      : Gaussian mixture model
 # - mstudent : Multivariate Student's-t distribution
 # - sparse   : Multivariate sparse Gaussian distribution
-model = "mstudent"
+# model = "mixed_student"
+model = "mixed"
 distribution_params = parameters.GetDistributionParams(model, p)
 
 # Initialize the data generator
@@ -24,33 +32,42 @@ DataSampler = data.DataSampler(distribution_params)
 
 # Number of training examples
 n = 1000
-
-# not used but included in dictionary
 ncat = int(p/2)
 cat_columns = np.arange(0, ncat)
 num_cuts = 4
 
-# Sample training data
-X_train = DataSampler.sample(n)
 
+# USE THIS FOR JUST K DUMMY VARIABLES
+X_train = pd.DataFrame(DataSampler.sample(n))
+X_train.iloc[:, cat_columns] = X_train.iloc[:, cat_columns].apply(lambda x: pd.qcut(x, 4, retbins=False, labels=False), axis=0).astype(str)
+X_train_dums = pd.get_dummies(X_train.iloc[:, cat_columns], prefix=X_train.iloc[:, cat_columns].columns.values.astype(str).tolist())
+X_train = pd.concat([X_train_dums.reset_index(drop=True), X_train.drop(cat_columns, axis=1).reset_index(drop=True)], axis=1)
+
+# X_train = X_train.astype('int64')
+
+# SigmaHatM = np.array(fastM.MVTMLE(X=X_train,location=False).rx2('Sigma'))
 # SigmaHat = np.cov(X_train, rowvar=False)
 mcd = MinCovDet().fit(X_train)
-SigmaHat = mcd.covariance_ 
+SigmaHat_mcd = mcd.covariance_ 
+# lw = LedoitWolf().fit(X_train)
+# SigmaHat_lw = lw.covariance_
+# SigmaHat_chen = chen_covariance(X_train,SigmaHat)
 
-# TO USE LATER
-# regularizer = np.array([1e-1]*(num_cuts*ncat)+[1e-1]*(SigmaHat.shape[1]-(num_cuts*ncat)))
-# # Initialize generator of second-order knockoffs
-second_order = gk.GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp", regularizer=1e-1)
-
+# regularizer = np.array([1e-4]*(num_cuts*ncat)+[1e-4]*(SigmaHat.shape[1]-(num_cuts*ncat)))
 # Initialize generator of second-order knockoffs
-# second_order = GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp")
+# second_order = gk.GaussianKnockoffs(SigmaHat_lw, mu=np.mean(X_train, 0), method="sdp", regularizer=1e-1)
+second_order = gk.GaussianKnockoffs(SigmaHat_mcd, mu=np.mean(X_train, 0), method="sdp", regularizer=0.09)
+# second_order = gk.GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp", regularizer=1e-1)
 
 # Measure pairwise second-order knockoff correlations
-corr_g = (np.diag(SigmaHat) - np.diag(second_order.Ds)) / np.diag(SigmaHat)
+# corr_g = (np.diag(SigmaHat) - np.diag(second_order.Ds)) / np.diag(SigmaHat)
+corr_g = (np.diag(SigmaHat_mcd) - np.diag(second_order.Ds)) / np.diag(SigmaHat_mcd)
 
+print(np.average(corr_g))
+print(np.average(corr_g[1:(num_cuts*ncat)]))
+print(np.average(corr_g[((num_cuts*ncat)+1):((num_cuts*ncat)+ int(p/2))]))
 
 training_params = parameters.GetTrainingHyperParams(model)
-
 p = X_train.shape[1]
 
 # Set the parameters for training deep knockoffs
@@ -74,12 +91,12 @@ pars['num_cuts'] = num_cuts
 # pars['regularizer'] = grid_results[0]
 # Boolean for using different weighting structure for decorr
 pars['use_weighting'] = False
-# Boolean for using mixed data in forward function
-pars['mixed_data'] = False
 # Multiplier for weighting discrete variables
 pars['kappa'] = 1
 # Boolean for using the different decorr loss function from the paper
 pars['diff_decorr'] = False
+# Boolean for using mixed data in forward function
+pars['mixed_data'] = True
 # Size of the test set
 pars['test_size'] = 0
 # Batch size
@@ -101,9 +118,12 @@ pars['target_corr'] = corr_g
 # Kernel widths for the MMD measure (uniform weights)
 pars['alphas'] = [1., 2., 4., 8., 16., 32., 64., 128.]
 
+# machine = KnockoffMachine(pars)
+# machine.train(X_train.values)
 
 # Save parameters
 np.save('/artifacts/pars.npy', pars)
+
 
 # Where to store the machine
 checkpoint_name = "/artifacts/" + model
@@ -115,4 +135,4 @@ logs_name = "/artifacts/" + model + "_progress.txt"
 machine = KnockoffMachine(pars, checkpoint_name=checkpoint_name, logs_name=logs_name)
 
 # Train the machine
-machine.train(X_train)
+machine.train(X_train.values)
