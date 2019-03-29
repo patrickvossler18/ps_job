@@ -60,7 +60,6 @@ print(np.average(corr_g))
 
 training_params = parameters.GetTrainingHyperParams(model)
 p = X_train.shape[1]
-print(p)
 n = X_train.shape[0]
 
 # Set the parameters for training deep knockoffs
