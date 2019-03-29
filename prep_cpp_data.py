@@ -21,4 +21,4 @@ def clean_cpp_data(X):
 
     print(chunk_list)
     X_new = X_new.drop(columns = factor_list)
-    return(X_new.values)
+    return(X_new)
