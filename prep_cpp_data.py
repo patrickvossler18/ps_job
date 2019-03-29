@@ -21,3 +21,4 @@ def clean_cpp_data(X):
 
 
     X_new = X_new.drop(columns = factor_list)
+    return(X_new)
