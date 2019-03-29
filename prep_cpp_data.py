@@ -8,7 +8,6 @@ def clean_cpp_data(X):
     print(factor_list)
     # Drop Y and W
     X_new = X
-    print(list(X.columns.values))
     # Convert factors to dummies
     chunk_list = []
     for factor in factor_list:
@@ -19,6 +18,5 @@ def clean_cpp_data(X):
         chunk_list.append(chunks)
         X_new = pd.concat([X_new, expanded], axis=1)
 
-    print(chunk_list)
     X_new = X_new.drop(columns = factor_list)
-    return(X_new.values)
+    return([X_new.values,chunk_list])
