@@ -1,4 +1,5 @@
 import pandas as pd
+from itertools import chain
 
 def clean_cpp_data(X):
     factor_list = pd.read_csv("~/ps_job/factor_list.csv").values.tolist()
