@@ -5,7 +5,6 @@ def clean_cpp_data(X):
     factor_list = pd.read_csv("~/ps_job/factor_list.csv").values.tolist()
 
     factor_list = list(chain(*factor_list))
-    print(factor_list)
     # Drop Y and W
     X_new = X
     # Convert factors to dummies
