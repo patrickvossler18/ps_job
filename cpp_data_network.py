@@ -42,7 +42,7 @@ for factor in factor_list:
 
 X_new = X_new.drop(columns = factor_list)
 
-cat_start = X_new.shape[1] - np.sum(chunk_list) - 1
+cat_start = (X_new.shape[1] + 1) - np.sum(chunk_list)
 cat_var_idx = np.arange(cat_start,X_new.shape[1])
 
 # Split train test 80-20 and save index of train data for later
