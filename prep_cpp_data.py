@@ -8,7 +8,7 @@ def clean_cpp_data(X):
     print(factor_list)
     # Drop Y and W
     X_new = X
-
+    list(X.columns.values)
     # Convert factors to dummies
     chunk_list = []
     for factor in factor_list:
