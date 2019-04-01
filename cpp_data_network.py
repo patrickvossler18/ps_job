@@ -9,15 +9,13 @@ from sklearn.covariance import MinCovDet, LedoitWolf
 from itertools import chain
 
 
-
-# Load the built-in multivariate Student's-t model and its default parameters
 # The currently available built-in models are:
 # - gaussian : Multivariate Gaussian distribution
 # - gmm      : Gaussian mixture model
 # - mstudent : Multivariate Student's-t distribution
 # - sparse   : Multivariate sparse Gaussian distribution
 # model = "mixed_student"
-model = "gaussian"
+model = "mstudent"
 
 # Load data
 cpp_data = pd.read_csv("cpp_final.csv")
