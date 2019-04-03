@@ -48,7 +48,7 @@ X_train = X_new.sample(frac=0.8,random_state=200)
 np.savetxt("/artifacts/train_msk.csv", X_train.index, delimiter=",")
 
 # Regularize the covariance and generate second order knockoffs
-# mcd = LedoitWolf().fit(X_train)
+# mcd = MinCovDet().fit(X_train)
 # SigmaHat_mcd = mcd.covariance_ 
 SigmaHat_mcd = np.cov(X_train, rowvar=False)
 second_order = gk.GaussianKnockoffs(SigmaHat_mcd, mu=np.mean(X_train, 0), method="sdp", regularizer=0.05)
