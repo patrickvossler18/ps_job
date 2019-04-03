@@ -15,7 +15,7 @@ from itertools import chain
 # - mstudent : Multivariate Student's-t distribution
 # - sparse   : Multivariate sparse Gaussian distribution
 # model = "mixed_student"
-model = "mstudent"
+model = "gaussian"
 
 # Load data
 cpp_data = pd.read_csv("cpp_final.csv")
@@ -51,7 +51,7 @@ np.savetxt("/artifacts/train_msk.csv", X_train.index, delimiter=",")
 mcd = LedoitWolf().fit(X_train)
 SigmaHat_mcd = mcd.covariance_ 
 # SigmaHat_mcd = np.cov(X_train, rowvar=False)
-second_order = gk.GaussianKnockoffs(SigmaHat_mcd, mu=np.mean(X_train, 0), method="sdp", regularizer=1e-3)
+second_order = gk.GaussianKnockoffs(SigmaHat_mcd, mu=np.mean(X_train, 0), method="sdp", regularizer=0.05)
 corr_g = (np.diag(SigmaHat_mcd) - np.diag(second_order.Ds)) / np.diag(SigmaHat_mcd)
 
 print(np.average(corr_g))
