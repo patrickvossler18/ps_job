@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from DeepKnockoffs import KnockoffMachine
+# from DeepKnockoffs import KnockoffMachine
 # from DeepKnockoffs import GaussianKnockoffs
 import gk
 import data
@@ -48,7 +48,7 @@ X_train = X_new.sample(frac=0.8,random_state=200)
 np.savetxt("/artifacts/train_msk.csv", X_train.index, delimiter=",")
 
 # Regularize the covariance and generate second order knockoffs
-# mcd = EmpiricalCovariance().fit(X_train)
+mcd = MinCovDet().fit(X_train)
 SigmaHat_mcd = ledoit_wolf(X_train)[0]
 # SigmaHat_mcd = mcd.covariance_ 
 # SigmaHat_mcd = np.cov(X_train, rowvar=False)
