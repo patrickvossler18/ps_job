@@ -5,19 +5,17 @@ from DeepKnockoffs import KnockoffMachine
 import gk
 import data
 import parameters
-from sklearn.covariance import MinCovDet, LedoitWolf
+from sklearn.covariance import MinCovDet, LedoitWolf, ledoit_wolf,oas, EmpiricalCovariance
 from itertools import chain
 
 
-
-# Load the built-in multivariate Student's-t model and its default parameters
 # The currently available built-in models are:
 # - gaussian : Multivariate Gaussian distribution
 # - gmm      : Gaussian mixture model
 # - mstudent : Multivariate Student's-t distribution
 # - sparse   : Multivariate sparse Gaussian distribution
 # model = "mixed_student"
-model = "gaussian"
+model = "mstudent"
 
 # Load data
 cpp_data = pd.read_csv("cpp_final.csv")
@@ -39,9 +37,10 @@ for factor in factor_list:
     chunk_list.append(chunks)
     X_new = pd.concat([X_new, expanded], axis=1)
 
+
 X_new = X_new.drop(columns = factor_list)
 
-cat_start = X_new.shape[1] - np.sum(chunk_list)
+cat_start = (X_new.shape[1]) - np.sum(chunk_list)
 cat_var_idx = np.arange(cat_start,X_new.shape[1])
 
 # Split train test 80-20 and save index of train data for later
@@ -49,20 +48,23 @@ X_train = X_new.sample(frac=0.8,random_state=200)
 np.savetxt("/artifacts/train_msk.csv", X_train.index, delimiter=",")
 
 # Regularize the covariance and generate second order knockoffs
-mcd = MinCovDet().fit(X_train)
-SigmaHat_mcd = mcd.covariance_ 
-second_order = gk.GaussianKnockoffs(SigmaHat_mcd, mu=np.mean(X_train, 0), method="sdp", regularizer=0.01)
+# mcd = MinCovDet().fit(X_train)
+SigmaHat_mcd = ledoit_wolf(X_train)[0]
+# SigmaHat_mcd = mcd.covariance_ 
+# SigmaHat_mcd = np.cov(X_train, rowvar=False)
+second_order = gk.GaussianKnockoffs(SigmaHat_mcd, mu=np.mean(X_train, 0), method="sdp", regularizer=0.005)
 corr_g = (np.diag(SigmaHat_mcd) - np.diag(second_order.Ds)) / np.diag(SigmaHat_mcd)
 
 print(np.average(corr_g))
 
 training_params = parameters.GetTrainingHyperParams(model)
 p = X_train.shape[1]
+n = X_train.shape[0]
 
 # Set the parameters for training deep knockoffs
 pars = dict()
 # Number of epochs
-pars['epochs'] = 100
+pars['epochs'] = 50
 # Number of iterations over the full data per epoch
 pars['epoch_length'] = 100
 # Data type, either "continuous" or "binary"
