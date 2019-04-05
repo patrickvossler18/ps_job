@@ -67,6 +67,7 @@ param_combos = [(x,y) for x in a for y in b]
 
 for combo in param_combos:
     model="mstudent"
+    print(combo)
     # Set the parameters for training deep knockoffs
     pars = dict()
     # Number of epochs
