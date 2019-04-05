@@ -48,14 +48,16 @@ X_train = X_new.sample(frac=0.8,random_state=200)
 np.savetxt("/artifacts/train_msk.csv", X_train.index, delimiter=",")
 
 # Regularize the covariance and generate second order knockoffs
-# mcd = MinCovDet().fit(X_train)
-SigmaHat_mcd = ledoit_wolf(X_train)[0]
-# SigmaHat_mcd = mcd.covariance_ 
+mcd = MinCovDet().fit(X_train)
+# SigmaHat_mcd = ledoit_wolf(X_train)[0]
+SigmaHat_mcd = mcd.covariance_ 
+SigmaHat_mcd[SigmaHat_mcd ==0] = 1e-13
 # SigmaHat_mcd = np.cov(X_train, rowvar=False)
-second_order = gk.GaussianKnockoffs(SigmaHat_mcd, mu=np.mean(X_train, 0), method="sdp", regularizer=0.005)
+second_order = gk.GaussianKnockoffs(SigmaHat_mcd, mu=np.mean(X_train, 0), method="sdp", regularizer=0.01)
 corr_g = (np.diag(SigmaHat_mcd) - np.diag(second_order.Ds)) / np.diag(SigmaHat_mcd)
 
 print(np.average(corr_g))
+
 
 training_params = parameters.GetTrainingHyperParams(model)
 p = X_train.shape[1]
