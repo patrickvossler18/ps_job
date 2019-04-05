@@ -15,7 +15,7 @@ from itertools import chain
 # - mstudent : Multivariate Student's-t distribution
 # - sparse   : Multivariate sparse Gaussian distribution
 # model = "mixed_student"
-model = "gaussian"
+model = "mstudent"
 
 # Load data
 cpp_data = pd.read_csv("cpp_final.csv")
