@@ -19,32 +19,22 @@ model = "gaussian"
 
 # Load data
 cpp_data = pd.read_csv("cpp_final.csv")
-factor_list = pd.read_csv("factor_list.csv").values.tolist()
 
+factor_list = pd.read_csv("factor_list.csv").values.tolist()
+chunk_list = pd.read_csv("chunk_list.csv").values.tolist()
+cat_var_idx = pd.read_csv("cat_var_idx.csv").values.tolist()
 factor_list = list(chain(*factor_list))
+chunk_list = list(chain(*chunk_list))
+cat_var_idx = list(chain(*cat_var_idx))
+
+
 
 # Drop Y and W
 X =  cpp_data.drop(columns=["Y","W"])
-X_new = X
 
-# Convert factors to dummies
-chunk_list = []
-for factor in factor_list:
-    # expand the variable
-    expanded = pd.get_dummies(data=X[factor])
-    # count how many columns
-    chunks = expanded.shape[1]
-    chunk_list.append(chunks)
-    X_new = pd.concat([X_new, expanded], axis=1)
-
-
-X_new = X_new.drop(columns = factor_list)
-
-cat_start = (X_new.shape[1]) - np.sum(chunk_list)
-cat_var_idx = np.arange(cat_start,X_new.shape[1])
 
 # Split train test 80-20 and save index of train data for later
-X_train = X_new.sample(frac=0.8,random_state=200)
+X_train = X.sample(frac=0.8,random_state=200)
 np.savetxt("/artifacts/train_msk.csv", X_train.index, delimiter=",")
 
 # Regularize the covariance and generate second order knockoffs
