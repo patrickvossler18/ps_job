@@ -45,7 +45,8 @@ SigmaHat_mcd = ledoit_wolf(X_train)[0]
 # SigmaHat_mcd[SigmaHat_mcd ==0] = 1e-13
 # SigmaHat_mcd = np.cov(X_train, rowvar=False)
 second_order = gk.GaussianKnockoffs(SigmaHat_mcd, mu=np.mean(X_train, 0), method="sdp", regularizer=0.02)
-corr_g = (np.diag(SigmaHat_mcd) - np.diag(second_order.Ds)) / np.diag(SigmaHat_mcd)
+# corr_g = (np.diag(SigmaHat_mcd) - np.diag(second_order.Ds)) / np.diag(SigmaHat_mcd)
+corr_g = np.diag(second_order.Ds)
 
 print(np.average(corr_g))
 
