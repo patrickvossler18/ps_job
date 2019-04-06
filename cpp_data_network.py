@@ -26,6 +26,7 @@ cat_var_idx = pd.read_csv("cat_var_idx.csv").values.tolist()
 factor_list = list(chain(*factor_list))
 chunk_list = list(chain(*chunk_list))
 cat_var_idx = list(chain(*cat_var_idx))
+cat_var_idx = np.array(cat_var_idx) - 1
 
 
 
