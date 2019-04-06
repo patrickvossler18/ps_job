@@ -18,4 +18,4 @@ def clean_cpp_data(X):
         X_new = pd.concat([X_new, expanded], axis=1)
 
     X_new = X_new.drop(columns = factor_list)
-    return([X_new.values,chunk_list])
+    return([X_new,chunk_list])
