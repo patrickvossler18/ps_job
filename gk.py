@@ -27,7 +27,8 @@ def solve_sdp(Sigma, tol=1e-3, regularizer=1e-4):
     if(np.min(np.linalg.eigvals(Sigma)) < 0):
         corrMatrix = cov2cor(Sigma + (regularizer)*np.eye(Sigma.shape[0]))
     else:
-        corrMatrix = cov2cor(Sigma + (regularizer)*np.eye(Sigma.shape[0]))
+        # corrMatrix = cov2cor(Sigma + (regularizer)*np.eye(Sigma.shape[0]))
+        corrMatrix = cov2cor(Sigma)
     p, _ = corrMatrix.shape
     s = cvx.Variable(p)
     objective = cvx.Maximize(sum(s))
