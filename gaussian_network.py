@@ -3,6 +3,7 @@ from DeepKnockoffs import KnockoffMachine
 from DeepKnockoffs import GaussianKnockoffs
 import data
 import parameters
+from sklearn.covariance import MinCovDet, LedoitWolf
 
 # Number of features
 p = 100
@@ -30,7 +31,9 @@ num_cuts = 4
 # Sample training data
 X_train = DataSampler.sample(n)
 
-SigmaHat = np.cov(X_train, rowvar=False)
+# SigmaHat = np.cov(X_train, rowvar=False)
+mcd = MinCovDet().fit(X_train)
+SigmaHat = mcd.covariance_ 
 
 # TO USE LATER
 # regularizer = np.array([1e-1]*(num_cuts*ncat)+[0]*(SigmaHat.shape[1]-(num_cuts*ncat)))
