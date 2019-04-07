@@ -77,7 +77,7 @@ for combo in param_combos:
     # List of categorical variables
     pars['cat_var_idx'] = []
     # Number of categories for each categorical variable
-    pars['chunk_list'] = chunk_list
+    pars['chunk_list'] = []
     # # Number of categories
     # pars['num_cuts'] = num_cuts
     # Size of regularizer
