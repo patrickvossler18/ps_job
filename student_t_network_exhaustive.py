@@ -75,7 +75,7 @@ for combo in param_combos:
     # Dimensions of the data
     pars['p'] = p
     # List of categorical variables
-    pars['cat_var_idx'] = cat_var_idx
+    pars['cat_var_idx'] = []
     # Number of categories for each categorical variable
     pars['chunk_list'] = chunk_list
     # # Number of categories
