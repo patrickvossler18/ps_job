@@ -34,7 +34,7 @@ X_train = DataSampler.sample(n)
 # SigmaHat = np.cov(X_train, rowvar=False)
 mcd = MinCovDet().fit(X_train)
 SigmaHat = mcd.covariance_ 
-SigmaHat= SigmaHat + (1e-3)*np.eye(SigmaHat.shape[0])
+SigmaHat= SigmaHat + (1e-1)*np.eye(SigmaHat.shape[0])
 
 # TO USE LATER
 # regularizer = np.array([1e-1]*(num_cuts*ncat)+[0]*(SigmaHat.shape[1]-(num_cuts*ncat)))
@@ -56,7 +56,7 @@ p = X_train.shape[1]
 # Set the parameters for training deep knockoffs
 pars = dict()
 # Number of epochs
-pars['epochs'] = 100
+pars['epochs'] = 50
 # Number of iterations over the full data per epoch
 pars['epoch_length'] = 100
 # Data type, either "continuous" or "binary"
