@@ -34,6 +34,7 @@ X_train = DataSampler.sample(n)
 # SigmaHat = np.cov(X_train, rowvar=False)
 mcd = MinCovDet().fit(X_train)
 SigmaHat = mcd.covariance_ 
+SigmaHat= SigmaHat + (1e-3)*np.eye(SigmaHat.shape[0])
 
 # TO USE LATER
 # regularizer = np.array([1e-1]*(num_cuts*ncat)+[0]*(SigmaHat.shape[1]-(num_cuts*ncat)))
@@ -46,6 +47,7 @@ second_order = GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp")
 # Measure pairwise second-order knockoff correlations
 corr_g = (np.diag(SigmaHat) - np.diag(second_order.Ds)) / np.diag(SigmaHat)
 
+print(np.average(corr_g))
 
 training_params = parameters.GetTrainingHyperParams(model)
 
