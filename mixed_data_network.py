@@ -16,8 +16,8 @@ p = 100
 # - gmm      : Gaussian mixture model
 # - mstudent : Multivariate Student's-t distribution
 # - sparse   : Multivariate sparse Gaussian distribution
-# model = "mixed_student"
-model = "mixed"
+model = "mixed_student"
+# model = "mixed"
 distribution_params = parameters.GetDistributionParams(model, p)
 
 # Initialize the data generator
@@ -55,6 +55,8 @@ print(np.average(corr_g[((num_cuts*ncat)+1):((num_cuts*ncat)+ int(p/2))]))
 training_params = parameters.GetTrainingHyperParams(model)
 p = X_train.shape[1]
 
+chunk_list = [num_cuts] * (ncat)
+
 # Set the parameters for training deep knockoffs
 pars = dict()
 # Number of epochs
@@ -72,6 +74,8 @@ pars['cat_var_idx'] = np.arange(0, (ncat * (num_cuts)))
 pars['ncat'] = ncat
 # Number of categories
 pars['num_cuts'] = num_cuts
+# Number of categories for each categorical variable
+pars['chunk_list'] = chunk_list
 # Size of regularizer
 # pars['regularizer'] = grid_results[0]
 # Boolean for using different weighting structure for decorr
