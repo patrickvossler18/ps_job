@@ -56,7 +56,7 @@ p = X_train.shape[1]
 # Set the parameters for training deep knockoffs
 pars = dict()
 # Number of epochs
-pars['epochs'] = 50
+pars['epochs'] = 100
 # Number of iterations over the full data per epoch
 pars['epoch_length'] = 100
 # Data type, either "continuous" or "binary"
