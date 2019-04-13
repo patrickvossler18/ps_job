@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 from DeepKnockoffs import KnockoffMachine
-# from DeepKnockoffs import GaussianKnockoffs
+from DeepKnockoffs import GaussianKnockoffs
 import gk
 import data
 import parameters
@@ -33,19 +33,19 @@ num_cuts = 4
 # Sample training data
 X_train = DataSampler.sample(n)
 
-# SigmaHat = np.cov(X_train, rowvar=False)
-mcd = MinCovDet().fit(X_train)
-SigmaHat = mcd.covariance_ 
+SigmaHat = np.cov(X_train, rowvar=False)
+# mcd = MinCovDet().fit(X_train)
+# SigmaHat = mcd.covariance_ 
 
-SigmaHat= SigmaHat + (9e-3)*np.eye(SigmaHat.shape[0])
+SigmaHat= SigmaHat + (2e-1)*np.eye(SigmaHat.shape[0])
 
 # TO USE LATER
 # regularizer = np.array([1e-1]*(num_cuts*ncat)+[1e-1]*(SigmaHat.shape[1]-(num_cuts*ncat)))
 # # Initialize generator of second-order knockoffs
-second_order = gk.GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp", regularizer=1e-1)
+# second_order = gk.GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp", regularizer=1e-1)
 
 # Initialize generator of second-order knockoffs
-# second_order = GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp")
+second_order = GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp")
 
 # Measure pairwise second-order knockoff correlations
 corr_g = (np.diag(SigmaHat) - np.diag(second_order.Ds)) / np.diag(SigmaHat)
