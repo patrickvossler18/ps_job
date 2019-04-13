@@ -1,14 +1,14 @@
 import numpy as np
 import pandas as pd
 from DeepKnockoffs import KnockoffMachine
-# from DeepKnockoffs import GaussianKnockoffs
-import gk
+from DeepKnockoffs import GaussianKnockoffs
+# import gk
 import data
 import parameters
 from sklearn.covariance import MinCovDet, LedoitWolf
 
 # Number of features
-p = 100
+p = 200
 
 # Load the built-in multivariate Student's-t model and its default parameters
 # The currently available built-in models are:
@@ -33,19 +33,19 @@ num_cuts = 4
 # Sample training data
 X_train = DataSampler.sample(n)
 
-# SigmaHat = np.cov(X_train, rowvar=False)
-mcd = MinCovDet().fit(X_train)
-SigmaHat = mcd.covariance_ 
+SigmaHat = np.cov(X_train, rowvar=False)
+# mcd = MinCovDet().fit(X_train)
+# SigmaHat = mcd.covariance_ 
 
-SigmaHat= SigmaHat + (9e-3)*np.eye(SigmaHat.shape[0])
+SigmaHat= SigmaHat + (2e-1)*np.eye(SigmaHat.shape[0])
 
 # TO USE LATER
 # regularizer = np.array([1e-1]*(num_cuts*ncat)+[1e-1]*(SigmaHat.shape[1]-(num_cuts*ncat)))
 # # Initialize generator of second-order knockoffs
-second_order = gk.GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp", regularizer=1e-1)
+# second_order = gk.GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp", regularizer=1e-1)
 
 # Initialize generator of second-order knockoffs
-# second_order = GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp")
+second_order = GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp")
 
 # Measure pairwise second-order knockoff correlations
 corr_g = (np.diag(SigmaHat) - np.diag(second_order.Ds)) / np.diag(SigmaHat)
@@ -59,7 +59,7 @@ p = X_train.shape[1]
 # Set the parameters for training deep knockoffs
 pars = dict()
 # Number of epochs
-pars['epochs'] = 50
+pars['epochs'] = 100
 # Number of iterations over the full data per epoch
 pars['epoch_length'] = 100
 # Data type, either "continuous" or "binary"
