@@ -31,7 +31,7 @@ num_cuts = 4
 # Sample training data
 X_train = DataSampler.sample(n)
 
-# SigmaHat = np.cov(X_train, rowvar=False)
+SigmaHat = np.cov(X_train, rowvar=False)
 # mcd = MinCovDet().fit(X_train)
 # SigmaHat = mcd.covariance_ 
 SigmaHat= SigmaHat + (2e-1)*np.eye(SigmaHat.shape[0])
