@@ -15,7 +15,7 @@ from sklearn.covariance import MinCovDet, LedoitWolf
 
 
 # Number of features
-p = 100
+p = 200
 
 # Load the built-in multivariate Student's-t model and its default parameters
 # The currently available built-in models are:
@@ -68,7 +68,11 @@ print(np.average(corr_g[1:(num_cuts*ncat)]))
 print(np.average(corr_g[((num_cuts*ncat)+1):((num_cuts*ncat)+ int(p/2))]))
 
 training_params = parameters.GetTrainingHyperParams(model)
+training_params['LAMBDA'] = 0.0078
+training_params['DELTA'] = 0.0078
 p = X_train.shape[1]
+
+chunk_list = [num_cuts] * (ncat)
 
 # Set the parameters for training deep knockoffs
 pars = dict()
@@ -87,6 +91,8 @@ pars['cat_var_idx'] = np.arange(0, (ncat * (num_cuts)))
 pars['ncat'] = ncat
 # Number of categories
 pars['num_cuts'] = num_cuts
+# Number of categories for each categorical variable
+pars['chunk_list'] = chunk_list
 # Size of regularizer
 # pars['regularizer'] = grid_results[0]
 # Boolean for using different weighting structure for decorr
