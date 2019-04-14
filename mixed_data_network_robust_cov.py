@@ -32,7 +32,7 @@ DataSampler = data.DataSampler(distribution_params)
 
 # Number of training examples
 n = 1000
-ncat = int(p/2)
+ncat = int(p/4)
 cat_columns = np.arange(0, ncat)
 num_cuts = 4
 
@@ -49,12 +49,13 @@ X_train = pd.concat([X_train_dums.reset_index(drop=True), X_train.drop(cat_colum
 # SigmaHat = np.cov(X_train, rowvar=False)
 mcd = MinCovDet().fit(X_train)
 SigmaHat_mcd = mcd.covariance_ 
-# SigmaHat_mcd + (0.2)*np.eye(SigmaHat_mcd.shape[0])
+# regularizer = np.array([1e-4]*(num_cuts*ncat)+[1e-4]*(SigmaHat.shape[1]-(num_cuts*ncat)))
+SigmaHat_mcd = SigmaHat_mcd + (0.1)*np.eye(SigmaHat_mcd.shape[0])
 # lw = LedoitWolf().fit(X_train)
 # SigmaHat_lw = lw.covariance_
 # SigmaHat_chen = chen_covariance(X_train,SigmaHat)
 
-# regularizer = np.array([1e-4]*(num_cuts*ncat)+[1e-4]*(SigmaHat.shape[1]-(num_cuts*ncat)))
+
 # Initialize generator of second-order knockoffs
 # second_order = gk.GaussianKnockoffs(SigmaHat_lw, mu=np.mean(X_train, 0), method="sdp", regularizer=1e-1)
 second_order = gk.GaussianKnockoffs(SigmaHat_mcd, mu=np.mean(X_train, 0), method="sdp", regularizer=0.09)
@@ -66,11 +67,11 @@ corr_g = (np.diag(SigmaHat_mcd) - np.diag(second_order.Ds)) / np.diag(SigmaHat_m
 
 print(np.average(corr_g))
 print(np.average(corr_g[1:(num_cuts*ncat)]))
-print(np.average(corr_g[((num_cuts*ncat)+1):((num_cuts*ncat)+ int(p/2))]))
+print(np.average(corr_g[((num_cuts*ncat)+1):((num_cuts*ncat)+ int(p/4))]))
 
 training_params = parameters.GetTrainingHyperParams(model)
 training_params['LAMBDA'] = 0.0078
-training_params['DELTA'] = 0.01
+training_params['DELTA'] = 0.0078
 p = X_train.shape[1]
 
 chunk_list = [num_cuts] * (ncat)
