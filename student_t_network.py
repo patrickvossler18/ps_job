@@ -8,7 +8,7 @@ import parameters
 from sklearn.covariance import MinCovDet, LedoitWolf
 
 # Number of features
-p = 200
+p = 100
 
 # Load the built-in multivariate Student's-t model and its default parameters
 # The currently available built-in models are:
@@ -33,9 +33,9 @@ num_cuts = 4
 # Sample training data
 X_train = DataSampler.sample(n)
 
-# SigmaHat = np.cov(X_train, rowvar=False)
-mcd = MinCovDet().fit(X_train)
-SigmaHat = mcd.covariance_ 
+SigmaHat = np.cov(X_train, rowvar=False)
+# mcd = MinCovDet().fit(X_train)
+# SigmaHat = mcd.covariance_ 
 
 SigmaHat= SigmaHat + (2e-1)*np.eye(SigmaHat.shape[0])
 
@@ -53,6 +53,9 @@ corr_g = (np.diag(SigmaHat) - np.diag(second_order.Ds)) / np.diag(SigmaHat)
 print(np.average(corr_g))
 
 training_params = parameters.GetTrainingHyperParams(model)
+training_params['LAMBDA'] = 0.001
+training_params['DELTA'] = 0.1
+
 
 p = X_train.shape[1]
 
