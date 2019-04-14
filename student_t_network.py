@@ -37,7 +37,7 @@ X_train = DataSampler.sample(n)
 mcd = MinCovDet().fit(X_train)
 SigmaHat = mcd.covariance_ 
 
-SigmaHat= SigmaHat + (9e-3)*np.eye(SigmaHat.shape[0])
+SigmaHat= SigmaHat + (5e-3)*np.eye(SigmaHat.shape[0])
 
 # TO USE LATER
 # regularizer = np.array([1e-1]*(num_cuts*ncat)+[1e-1]*(SigmaHat.shape[1]-(num_cuts*ncat)))
