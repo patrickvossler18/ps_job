@@ -78,7 +78,7 @@ chunk_list = [num_cuts] * (ncat)
 # Set the parameters for training deep knockoffs
 pars = dict()
 # Number of epochs
-pars['epochs'] = 100
+pars['epochs'] = 50
 # Number of iterations over the full data per epoch
 pars['epoch_length'] = 100
 # Data type, either "continuous" or "binary"
