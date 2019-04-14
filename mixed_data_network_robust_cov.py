@@ -49,7 +49,7 @@ X_train = pd.concat([X_train_dums.reset_index(drop=True), X_train.drop(cat_colum
 # SigmaHat = np.cov(X_train, rowvar=False)
 mcd = MinCovDet().fit(X_train)
 SigmaHat_mcd = mcd.covariance_ 
-SigmaHat_mcd + (0.2)*np.eye(SigmaHat_mcd.shape[0])
+# SigmaHat_mcd + (0.2)*np.eye(SigmaHat_mcd.shape[0])
 # lw = LedoitWolf().fit(X_train)
 # SigmaHat_lw = lw.covariance_
 # SigmaHat_chen = chen_covariance(X_train,SigmaHat)
@@ -70,7 +70,7 @@ print(np.average(corr_g[((num_cuts*ncat)+1):((num_cuts*ncat)+ int(p/2))]))
 
 training_params = parameters.GetTrainingHyperParams(model)
 training_params['LAMBDA'] = 0.0078
-training_params['DELTA'] = 0.0078
+training_params['DELTA'] = 0.01
 p = X_train.shape[1]
 
 chunk_list = [num_cuts] * (ncat)
