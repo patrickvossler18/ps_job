@@ -8,7 +8,7 @@ import parameters
 from sklearn.covariance import MinCovDet, LedoitWolf
 
 # Number of features
-p = 100
+p = 200
 
 # Load the built-in multivariate Student's-t model and its default parameters
 # The currently available built-in models are:
@@ -54,7 +54,7 @@ print(np.average(corr_g))
 
 training_params = parameters.GetTrainingHyperParams(model)
 training_params['LAMBDA'] = 0.001
-training_params['DELTA'] = 0.009
+training_params['DELTA'] = 0.05
 
 
 p = X_train.shape[1]
