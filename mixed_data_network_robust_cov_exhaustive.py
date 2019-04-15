@@ -15,7 +15,7 @@ from sklearn.covariance import MinCovDet, LedoitWolf
 
 
 # Number of features
-p = 100
+p = 200
 
 # Load the built-in multivariate Student's-t model and its default parameters
 # The currently available built-in models are:
@@ -74,26 +74,29 @@ a = np.linspace(0.01,0.001,num=5)
 b = np.linspace(0.01,0.001,num=5)
 param_combos = [(x,y) for x in a for y in b]
 
+chunk_list = [num_cuts] * (ncat)
+
 for combo in param_combos:
     model = "mixed"
     print(combo)
     # Set the parameters for training deep knockoffs
     pars = dict()
     # Number of epochs
-    pars['epochs'] = 100
+    pars['epochs'] = 50
     # Number of iterations over the full data per epoch
     pars['epoch_length'] = 100
     # Data type, either "continuous" or "binary"
     pars['family'] = "continuous"
     # Dimensions of the data
     pars['p'] = p
-    pars['ncat'] = ncat
     # List of categorical variables
     pars['cat_var_idx'] = np.arange(0, (ncat * (num_cuts)))
     # Number of discrete variables
     pars['ncat'] = ncat
     # Number of categories
     pars['num_cuts'] = num_cuts
+    # Number of categories for each categorical variable
+    pars['chunk_list'] = chunk_list
     # Size of regularizer
     # pars['regularizer'] = grid_results[0]
     # Boolean for using different weighting structure for decorr
