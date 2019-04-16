@@ -47,18 +47,18 @@ X_train = pd.concat([X_train_dums.reset_index(drop=True), X_train.drop(cat_colum
 
 # SigmaHatM = np.array(fastM.MVTMLE(X=X_train,location=False).rx2('Sigma'))
 # SigmaHat = np.cov(X_train, rowvar=False)
-mcd = MinCovDet().fit(X_train)
-SigmaHat_mcd = mcd.covariance_ 
-regularizer = np.array([5e-2]*(num_cuts*ncat)+[5e-2]*(SigmaHat_mcd.shape[1]-(num_cuts*ncat)))
-SigmaHat_mcd = SigmaHat_mcd + (regularizer)*np.eye(SigmaHat_mcd.shape[0])
-# lw = LedoitWolf().fit(X_train)
-# SigmaHat_lw = lw.covariance_
+# mcd = MinCovDet().fit(X_train)
+# SigmaHat_mcd = mcd.covariance_ 
+# regularizer = np.array([5e-2]*(num_cuts*ncat)+[5e-2]*(SigmaHat_mcd.shape[1]-(num_cuts*ncat)))
+# SigmaHat_mcd = SigmaHat_mcd + (regularizer)*np.eye(SigmaHat_mcd.shape[0])
+lw = LedoitWolf().fit(X_train)
+SigmaHat_lw = lw.covariance_
 # SigmaHat_chen = chen_covariance(X_train,SigmaHat)
 
 
 # Initialize generator of second-order knockoffs
 # second_order = gk.GaussianKnockoffs(SigmaHat_lw, mu=np.mean(X_train, 0), method="sdp", regularizer=1e-1)
-second_order = gk.GaussianKnockoffs(SigmaHat_mcd, mu=np.mean(X_train, 0), method="sdp", regularizer=0.09)
+second_order = gk.GaussianKnockoffs(SigmaHat_lw, mu=np.mean(X_train, 0), method="sdp", regularizer=0.09)
 # second_order = gk.GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp", regularizer=1e-1)
 
 # Measure pairwise second-order knockoff correlations
