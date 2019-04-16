@@ -54,16 +54,16 @@ X_train = pd.concat([X_train_dums.reset_index(drop=True), X_train.drop(cat_colum
 lw = LedoitWolf().fit(X_train)
 SigmaHat_lw = lw.covariance_
 # SigmaHat_chen = chen_covariance(X_train,SigmaHat)
-
+SigmaHat = SigmaHat_lw
 
 # Initialize generator of second-order knockoffs
 # second_order = gk.GaussianKnockoffs(SigmaHat_lw, mu=np.mean(X_train, 0), method="sdp", regularizer=1e-1)
-second_order = gk.GaussianKnockoffs(SigmaHat_lw, mu=np.mean(X_train, 0), method="sdp", regularizer=0.09)
+second_order = gk.GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp", regularizer=0.09)
 # second_order = gk.GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp", regularizer=1e-1)
 
 # Measure pairwise second-order knockoff correlations
 # corr_g = (np.diag(SigmaHat) - np.diag(second_order.Ds)) / np.diag(SigmaHat)
-corr_g = (np.diag(SigmaHat_mcd) - np.diag(second_order.Ds)) / np.diag(SigmaHat_mcd)
+corr_g = (np.diag(SigmaHat) - np.diag(second_order.Ds)) / np.diag(SigmaHat)
 
 print(np.average(corr_g))
 print(np.average(corr_g[1:(num_cuts*ncat)]))
