@@ -24,7 +24,7 @@ p = 200
 # - mstudent : Multivariate Student's-t distribution
 # - sparse   : Multivariate sparse Gaussian distribution
 # model = "mixed_student"
-model = "mixed"
+model = "mixed_student"
 distribution_params = parameters.GetDistributionParams(model, p)
 
 # Initialize the data generator
@@ -71,7 +71,7 @@ print(np.average(corr_g[((num_cuts*ncat)+1):((num_cuts*ncat)+ int(p/4))]))
 
 training_params = parameters.GetTrainingHyperParams(model)
 training_params['LAMBDA'] = 0.0078
-training_params['DELTA'] = 0.0078
+training_params['DELTA'] = 0.01
 p = X_train.shape[1]
 
 chunk_list = [num_cuts] * (ncat)
