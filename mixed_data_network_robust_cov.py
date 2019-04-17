@@ -6,6 +6,9 @@ import gk
 import data
 import parameters
 from sklearn.covariance import MinCovDet, LedoitWolf
+import tyler_m_robust_cov
+
+
 # from rpy2.robjects import pandas2ri
 # from rpy2.robjects.packages import importr
 # pandas2ri.activate()
@@ -44,17 +47,17 @@ X_train_dums = pd.get_dummies(X_train.iloc[:, cat_columns], prefix=X_train.iloc[
 X_train = pd.concat([X_train_dums.reset_index(drop=True), X_train.drop(cat_columns, axis=1).reset_index(drop=True)], axis=1)
 
 # X_train = X_train.astype('int64')
-
+# SigmaHatM = tyler_m_robust_cov.getTylerM(X_train)
 # SigmaHatM = np.array(fastM.MVTMLE(X=X_train,location=False).rx2('Sigma'))
 # SigmaHat = np.cov(X_train, rowvar=False)
-# mcd = MinCovDet().fit(X_train)
-# SigmaHat_mcd = mcd.covariance_ 
-# regularizer = np.array([5e-2]*(num_cuts*ncat)+[5e-2]*(SigmaHat_mcd.shape[1]-(num_cuts*ncat)))
-# SigmaHat_mcd = SigmaHat_mcd + (regularizer)*np.eye(SigmaHat_mcd.shape[0])
-lw = LedoitWolf().fit(X_train)
-SigmaHat_lw = lw.covariance_
+mcd = MinCovDet().fit(X_train)
+SigmaHat_mcd = mcd.covariance_ 
+regularizer = np.array([3e-3]*(num_cuts*ncat)+[3e-3]*(SigmaHat_mcd.shape[1]-(num_cuts*ncat)))
+SigmaHat_mcd = SigmaHat_mcd + (regularizer)*np.eye(SigmaHat_mcd.shape[0])
+# lw = LedoitWolf().fit(X_train)
+# SigmaHat_lw = lw.covariance_
 # SigmaHat_chen = chen_covariance(X_train,SigmaHat)
-SigmaHat = SigmaHat_lw
+SigmaHat = SigmaHat_mcd
 
 # Initialize generator of second-order knockoffs
 # second_order = gk.GaussianKnockoffs(SigmaHat_lw, mu=np.mean(X_train, 0), method="sdp", regularizer=1e-1)
