@@ -35,7 +35,7 @@ DataSampler = data.DataSampler(distribution_params)
 
 # Number of training examples
 n = 1000
-ncat = int(p/4)
+ncat = int(p/2)
 cat_columns = np.arange(0, ncat)
 num_cuts = 4
 
@@ -52,7 +52,7 @@ X_train = pd.concat([X_train_dums.reset_index(drop=True), X_train.drop(cat_colum
 # SigmaHat = np.cov(X_train, rowvar=False)
 mcd = MinCovDet().fit(X_train)
 SigmaHat_mcd = mcd.covariance_ 
-regularizer = np.array([3e-3]*(num_cuts*ncat)+[3e-3]*(SigmaHat_mcd.shape[1]-(num_cuts*ncat)))
+regularizer = np.array([1e-5]*(num_cuts*ncat)+[1e-5]*(SigmaHat_mcd.shape[1]-(num_cuts*ncat)))
 SigmaHat_mcd = SigmaHat_mcd + (regularizer)*np.eye(SigmaHat_mcd.shape[0])
 # lw = LedoitWolf().fit(X_train)
 # SigmaHat_lw = lw.covariance_
@@ -70,7 +70,7 @@ corr_g = (np.diag(SigmaHat) - np.diag(second_order.Ds)) / np.diag(SigmaHat)
 
 print(np.average(corr_g))
 print(np.average(corr_g[1:(num_cuts*ncat)]))
-print(np.average(corr_g[((num_cuts*ncat)+1):((num_cuts*ncat)+ int(p/4))]))
+print(np.average(corr_g[((num_cuts*ncat)+1):((num_cuts*ncat)+ int(p/2))]))
 
 training_params = parameters.GetTrainingHyperParams(model)
 training_params['LAMBDA'] = 0.0078
