@@ -53,7 +53,7 @@ X_train = pd.concat([X_train_dums.reset_index(drop=True), X_train.drop(cat_colum
 mcd = MinCovDet().fit(X_train)
 SigmaHat_mcd = mcd.covariance_ 
 # regularizer = np.array([9e-5]*(num_cuts*ncat)+[9e-5]*(SigmaHat_mcd.shape[1]-(num_cuts*ncat)))
-SigmaHat_mcd = SigmaHat_mcd + (regularizer)*np.eye(SigmaHat_mcd.shape[0])
+# SigmaHat_mcd = SigmaHat_mcd + (regularizer)*np.eye(SigmaHat_mcd.shape[0])
 # lw = LedoitWolf().fit(X_train)
 # SigmaHat_lw = lw.covariance_
 # SigmaHat_chen = chen_covariance(X_train,SigmaHat)
