@@ -24,7 +24,7 @@ p = 200
 # - mstudent : Multivariate Student's-t distribution
 # - sparse   : Multivariate sparse Gaussian distribution
 # model = "mixed_student"
-model = "mixed"
+model = "mixed_student"
 distribution_params = parameters.GetDistributionParams(model, p)
 
 # Initialize the data generator
@@ -32,7 +32,7 @@ DataSampler = data.DataSampler(distribution_params)
 
 # Number of training examples
 n = 1000
-ncat = int(p/2)
+ncat = int(p/4)
 cat_columns = np.arange(0, ncat)
 num_cuts = 4
 
@@ -65,7 +65,7 @@ corr_g = (np.diag(SigmaHat_mcd) - np.diag(second_order.Ds)) / np.diag(SigmaHat_m
 
 print(np.average(corr_g))
 print(np.average(corr_g[1:(num_cuts*ncat)]))
-print(np.average(corr_g[((num_cuts*ncat)+1):((num_cuts*ncat)+ int(p/2))]))
+print(np.average(corr_g[((num_cuts*ncat)+1):((num_cuts*ncat)+ int(p/4))]))
 
 training_params = parameters.GetTrainingHyperParams(model)
 p = X_train.shape[1]
