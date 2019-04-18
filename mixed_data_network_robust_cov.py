@@ -6,7 +6,7 @@ import gk
 import data
 import parameters
 from sklearn.covariance import MinCovDet, LedoitWolf
-import tyler_m_robust_cov
+# import tyler_m_robust_cov
 
 
 # from rpy2.robjects import pandas2ri
@@ -18,7 +18,7 @@ import tyler_m_robust_cov
 
 
 # Number of features
-p = 200
+p = 50
 
 # Load the built-in multivariate Student's-t model and its default parameters
 # The currently available built-in models are:
@@ -27,7 +27,7 @@ p = 200
 # - mstudent : Multivariate Student's-t distribution
 # - sparse   : Multivariate sparse Gaussian distribution
 # model = "mixed_student"
-model = "mixed_student"
+model = "mixed"
 distribution_params = parameters.GetDistributionParams(model, p)
 
 # Initialize the data generator
@@ -49,11 +49,13 @@ X_train = pd.concat([X_train_dums.reset_index(drop=True), X_train.drop(cat_colum
 # X_train = X_train.astype('int64')
 # SigmaHatM = tyler_m_robust_cov.getTylerM(X_train)
 # SigmaHatM = np.array(fastM.MVTMLE(X=X_train,location=False).rx2('Sigma'))
-# SigmaHat = np.cov(X_train, rowvar=False)
+SigmaHat = np.cov(X_train, rowvar=False)
+regularizer = np.array([1e-5]*(num_cuts*ncat)+[0]*(SigmaHat.shape[1]-(num_cuts*ncat)))
+SigmaHat =SigmaHat + (regularizer)*np.eye(SigmaHat.shape[0])
 mcd = MinCovDet().fit(X_train)
 SigmaHat_mcd = mcd.covariance_ 
-regularizer = np.array([1e-4]*(num_cuts*ncat)+[0]*(SigmaHat_mcd.shape[1]-(num_cuts*ncat)))
-SigmaHat_mcd = SigmaHat_mcd + (regularizer)*np.eye(SigmaHat_mcd.shape[0])
+
+# SigmaHat_mcd = SigmaHat_mcd + (regularizer)*np.eye(SigmaHat_mcd.shape[0])
 # lw = LedoitWolf().fit(X_train)
 # SigmaHat_lw = lw.covariance_
 # SigmaHat_chen = chen_covariance(X_train,SigmaHat)
@@ -70,11 +72,11 @@ corr_g = (np.diag(SigmaHat) - np.diag(second_order.Ds)) / np.diag(SigmaHat)
 
 print(np.average(corr_g))
 print(np.average(corr_g[1:(num_cuts*ncat)]))
-print(np.average(corr_g[((num_cuts*ncat)+1):((num_cuts*ncat)+ int(p/2))]))
+print(np.average(corr_g[((num_cuts*ncat)+1):((num_cuts*ncat)+ int(p/4))]))
 
 training_params = parameters.GetTrainingHyperParams(model)
 training_params['LAMBDA'] = 0.0078
-training_params['DELTA'] = 0.01
+training_params['DELTA'] = 0.0078
 p = X_train.shape[1]
 
 chunk_list = [num_cuts] * (ncat)
