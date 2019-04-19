@@ -5,7 +5,8 @@ from DeepKnockoffs import KnockoffMachine
 import gk
 import data
 import parameters
-from sklearn.covariance import MinCovDet, LedoitWolf, ledoit_wolf,oas, EmpiricalCovariance
+from sklearn.covariance import MinCovDet, LedoitWolf, ledoit_wolf, GraphicalLassoCV,empirical_covariance
+from sklearn import preprocessing, covariance
 from itertools import chain
 
 
@@ -39,13 +40,24 @@ X_train = X.sample(frac=0.8,random_state=200)
 np.savetxt("/artifacts/train_msk.csv", X_train.index, delimiter=",")
 
 # Regularize the covariance and generate second order knockoffs
-# mcd = MinCovDet().fit(X_train)
-SigmaHat_mcd = ledoit_wolf(X_train)[0]
-# SigmaHat_mcd = mcd.covariance_ 
-# SigmaHat_mcd[SigmaHat_mcd ==0] = 1e-13
-# SigmaHat_mcd = np.cov(X_train, rowvar=False)
-second_order = gk.GaussianKnockoffs(SigmaHat_mcd, mu=np.mean(X_train, 0), method="sdp", regularizer=0.1)
-corr_g = np.nan_to_num((np.diag(SigmaHat_mcd) - np.diag(second_order.Ds)) / np.diag(SigmaHat_mcd))
+
+# SigmaHat_mcd = ledoit_wolf(X_train)[0]
+
+X_train = X_train.values.astype('float64')
+myScaler = preprocessing.StandardScaler()
+X_train = myScaler.fit_transform(X_train)
+# emp_cov = covariance.empirical_covariance(X_train)
+# shrunk_cov = covariance.shrunk_covariance(np.cov(X_train, rowvar=False), shrinkage=0.3)
+
+
+mcd = MinCovDet().fit(X_train)
+SigmaHat_mcd = mcd.covariance_ 
+
+# SigmaHat = np.cov(X_train, rowvar=False)
+
+SigmaHat = SigmaHat_mcd
+second_order = gk.GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp", regularizer=0.001)
+corr_g = np.nan_to_num((np.diag(SigmaHat) - np.diag(second_order.Ds)) / np.diag(SigmaHat))
 
 print(np.average(corr_g))
 
@@ -55,7 +67,7 @@ p = X_train.shape[1]
 n = X_train.shape[0]
 
 training_params['LAMBDA'] = 0.0078
-training_params['DELTA'] = 0.0078
+training_params['DELTA'] = 0.01
 
 # Set the parameters for training deep knockoffs
 pars = dict()
