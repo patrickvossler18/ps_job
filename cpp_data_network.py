@@ -15,7 +15,7 @@ from itertools import chain
 # - mstudent : Multivariate Student's-t distribution
 # - sparse   : Multivariate sparse Gaussian distribution
 # model = "mixed_student"
-model = "mixed"
+model = "mixed_student"
 
 # Load data
 cpp_data = pd.read_csv("cpp_final.csv")
@@ -39,12 +39,12 @@ X_train = X.sample(frac=0.8,random_state=200)
 np.savetxt("/artifacts/train_msk.csv", X_train.index, delimiter=",")
 
 # Regularize the covariance and generate second order knockoffs
-mcd = MinCovDet().fit(X_train)
-# SigmaHat_mcd = ledoit_wolf(X_train)[0]
-SigmaHat_mcd = mcd.covariance_ 
+# mcd = MinCovDet().fit(X_train)
+SigmaHat_mcd = ledoit_wolf(X_train)[0]
+# SigmaHat_mcd = mcd.covariance_ 
 # SigmaHat_mcd[SigmaHat_mcd ==0] = 1e-13
 # SigmaHat_mcd = np.cov(X_train, rowvar=False)
-second_order = gk.GaussianKnockoffs(SigmaHat_mcd, mu=np.mean(X_train, 0), method="sdp", regularizer=0.01)
+second_order = gk.GaussianKnockoffs(SigmaHat_mcd, mu=np.mean(X_train, 0), method="sdp", regularizer=0.1)
 corr_g = np.nan_to_num((np.diag(SigmaHat_mcd) - np.diag(second_order.Ds)) / np.diag(SigmaHat_mcd))
 
 print(np.average(corr_g))
@@ -53,6 +53,9 @@ print(np.average(corr_g))
 training_params = parameters.GetTrainingHyperParams(model)
 p = X_train.shape[1]
 n = X_train.shape[0]
+
+training_params['LAMBDA'] = 0.0078
+training_params['DELTA'] = 0.0078
 
 # Set the parameters for training deep knockoffs
 pars = dict()
