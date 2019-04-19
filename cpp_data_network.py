@@ -66,8 +66,8 @@ training_params = parameters.GetTrainingHyperParams(model)
 p = X_train.shape[1]
 n = X_train.shape[0]
 
-training_params['LAMBDA'] = 0.01
-training_params['DELTA'] = 0.001
+training_params['LAMBDA'] = 0.0078
+training_params['DELTA'] = 0.01
 
 # Set the parameters for training deep knockoffs
 pars = dict()
