@@ -46,7 +46,7 @@ mcd = MinCovDet().fit(X_train)
 # SigmaHat_mcd = ledoit_wolf(X_train)[0]
 SigmaHat_mcd = mcd.covariance_ 
 if(np.min(np.linalg.eigvals(SigmaHat_mcd)) < 0):
-    SigmaHat_mcd = SigmaHat_mcd + (1e-3)*np.eye(SigmaHat_mcd.shape[0])
+    SigmaHat_mcd = SigmaHat_mcd + (1e-4)*np.eye(SigmaHat_mcd.shape[0])
 
 X_train = X_train.values
 # myScaler = preprocessing.StandardScaler()
