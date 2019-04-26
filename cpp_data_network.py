@@ -49,7 +49,7 @@ SigmaHat_mcd = mcd.covariance_
 # SigmaHat_mcd = SigmaHat_mcd + (1e-6)*np.eye(SigmaHat_mcd.shape[0])
 # np.min(np.linalg.eigvals(SigmaHat_mcd))
 if(np.min(np.linalg.eigvals(SigmaHat_mcd)) < 0):
-    SigmaHat_mcd = SigmaHat_mcd + (1e-3)*np.eye(SigmaHat_mcd.shape[0])
+    SigmaHat_mcd = SigmaHat_mcd + (9e-3)*np.eye(SigmaHat_mcd.shape[0])
 
 # X_train = X_train.values
 # myScaler = preprocessing.StandardScaler()
