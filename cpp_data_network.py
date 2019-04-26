@@ -42,14 +42,13 @@ np.savetxt("/artifacts/train_msk.csv", X_train.index, delimiter=",")
 # Regularize the covariance and generate second order knockoffs
 
 # SigmaHat_lw = ledoit_wolf(X_train)[0]
-# mcd = MinCovDet().fit(X_train)
-# # SigmaHat_mcd = ledoit_wolf(X_train)[0]
-# SigmaHat_mcd = mcd.covariance_ 
+mcd = MinCovDet().fit(X_train)
+SigmaHat_mcd = mcd.covariance_ 
 # # np.min(np.linalg.eigvals(SigmaHat_mcd))
 # # SigmaHat_mcd = SigmaHat_mcd + (1e-6)*np.eye(SigmaHat_mcd.shape[0])
 # # np.min(np.linalg.eigvals(SigmaHat_mcd))
-# if(np.min(np.linalg.eigvals(SigmaHat_mcd)) < 0):
-#     SigmaHat_mcd = SigmaHat_mcd + (9e-3)*np.eye(SigmaHat_mcd.shape[0])
+if(np.min(np.linalg.eigvals(SigmaHat_mcd)) < 0):
+    SigmaHat_mcd = SigmaHat_mcd + (2e-2)*np.eye(SigmaHat_mcd.shape[0])
 
 # X_train = X_train.values
 # myScaler = preprocessing.StandardScaler()
@@ -58,12 +57,10 @@ np.savetxt("/artifacts/train_msk.csv", X_train.index, delimiter=",")
 # shrunk_cov = covariance.shrunk_covariance(np.cov(X_train, rowvar=False), shrinkage=0.3)
 
 
-# mcd = MinCovDet().fit(X_train)
-# SigmaHat_mcd = mcd.covariance_ 
-
-SigmaHat = np.cov(X_train, rowvar=False)
-if(np.min(np.linalg.eigvals(SigmaHat)) < 0):
-    SigmaHat = SigmaHat + (9e-3)*np.eye(SigmaHat.shape[0])
+SigmaHat = SigmaHat_mcd
+# SigmaHat = np.cov(X_train, rowvar=False)
+# if(np.min(np.linalg.eigvals(SigmaHat)) < 0):
+#     SigmaHat = SigmaHat + (2e-3)*np.eye(SigmaHat.shape[0])
 
 # second_order = gk.GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp", regularizer=0.001)
 second_order = gk.GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp", regularizer=0.001)
