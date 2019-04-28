@@ -43,7 +43,7 @@ mcd = MinCovDet().fit(X_train)
 # SigmaHat_mcd = ledoit_wolf(X_train)[0]
 SigmaHat_mcd = mcd.covariance_ 
 if(np.min(np.linalg.eigvals(SigmaHat_mcd)) < 0):
-    SigmaHat_mcd = SigmaHat_mcd + (5e-4)*np.eye(SigmaHat_mcd.shape[0])
+    SigmaHat_mcd = SigmaHat_mcd + (9e-3)*np.eye(SigmaHat_mcd.shape[0])
 
 second_order = gk.GaussianKnockoffs(SigmaHat_mcd, mu=np.mean(X_train, 0), method="sdp", regularizer=1e-1)
 corr_g = (np.diag(SigmaHat_mcd) - np.diag(second_order.Ds)) / np.diag(SigmaHat_mcd)
@@ -54,9 +54,13 @@ training_params = parameters.GetTrainingHyperParams(model)
 p = X_train.shape[1]
 n = X_train.shape[0]
 
-a = np.linspace(0.01,0.001,num=5)
-b = np.linspace(0.01,0.001,num=5)
-param_combos = [(x,y) for x in a for y in b]
+# a = np.linspace(0.01,0.001,num=5)
+# b = np.linspace(0.01,0.001,num=5)
+a = [0.0010,0.0055,0.0100]
+b = [0.0100,0.0078,0.0078]
+
+# param_combos = [(x,y) for x in a for y in b]
+param_combos = list(zip(a,b))
 
 for combo in param_combos:
     model="mstudent"
