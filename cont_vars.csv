@@ -7,7 +7,9 @@ mom_weight_prior
 mom_num_hema_cond
 mom_num_urin_cond
 mom_num_gyne_cond
+mom_num_neur_cond
 mom_num_obst_compl
+mom_num_infect_dis
 mom_years_educ
 family_income
 housing_density
@@ -17,6 +19,8 @@ dias_blood_pres
 mom_weight_birth
 dad_age
 dad_years_educ
+num_premes
+num_abortions
 bayley_mental
 bayley_motor
 IQ
@@ -29,12 +33,15 @@ breast_feed_days
 child_bilirubin
 child_hematocrit
 child_hemoglobin
+child_num_proc
 head_size_1yr
 birth_weight
 gest_delivery
 gest_at_reg
 tri_at_reg
+rad_prior_reg
 prior_pregs
+mom_num_gastro_cond
 zero_infV1
 zero_infV2
 zero_infV3
