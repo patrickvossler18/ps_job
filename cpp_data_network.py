@@ -48,7 +48,7 @@ SigmaHat_mcd = mcd.covariance_
 # # SigmaHat_mcd = SigmaHat_mcd + (1e-6)*np.eye(SigmaHat_mcd.shape[0])
 # # np.min(np.linalg.eigvals(SigmaHat_mcd))
 if(np.min(np.linalg.eigvals(SigmaHat_mcd)) < 0):
-    SigmaHat_mcd = SigmaHat_mcd + (9e-3)*np.eye(SigmaHat_mcd.shape[0])
+    SigmaHat_mcd = SigmaHat_mcd + (5e-4)*np.eye(SigmaHat_mcd.shape[0])
 
 # X_train = X_train.values
 # myScaler = preprocessing.StandardScaler()
@@ -74,8 +74,10 @@ training_params = parameters.GetTrainingHyperParams(model)
 p = X_train.shape[1]
 n = X_train.shape[0]
 
-training_params['LAMBDA'] = 0.0032
-training_params['DELTA'] = 0.01
+# training_params['LAMBDA'] = 0.0032
+# training_params['DELTA'] = 0.01
+training_params['LAMBDA'] = 0.001
+training_params['DELTA'] = 0.0078
 
 # Set the parameters for training deep knockoffs
 pars = dict()
