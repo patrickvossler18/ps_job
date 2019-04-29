@@ -54,13 +54,15 @@ training_params = parameters.GetTrainingHyperParams(model)
 p = X_train.shape[1]
 n = X_train.shape[0]
 
-# a = np.linspace(0.01,0.001,num=5)
-# b = np.linspace(0.01,0.001,num=5)
-a = [0.0010,0.0055,0.0100]
-b = [0.0100,0.0078,0.0078]
+a = np.linspace(0.01,0.001,num=5)
+b = np.linspace(0.01,0.001,num=5)
 
-# param_combos = [(x,y) for x in a for y in b]
-param_combos = list(zip(a,b))
+param_combos = [(x,y) for x in a for y in b]
+
+# a = [0.0010,0.0055,0.0100]
+# b = [0.0100,0.0078,0.0078]
+# param_combos = list(zip(a,b))
+
 
 for combo in param_combos:
     model="mstudent"
