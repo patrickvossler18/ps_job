@@ -107,7 +107,7 @@ pars['mixed_data'] = True
 # Size of the test set
 pars['test_size'] = 0
 # Batch size
-pars['batch_size'] = int(0.2*n)
+pars['batch_size'] = int(0.1*n)
 # Learning rate
 pars['lr'] = 0.01
 # When to decrease learning rate (unused when equal to number of epochs)
