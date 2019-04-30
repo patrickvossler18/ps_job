@@ -1,9 +1,7 @@
 variable
-mar_status
 mom_num_neur_cond
 mom_num_infect_dis
 mom_work_status
-mom_birth_place
 mom_race
 num_premes
 num_abortions
@@ -13,8 +11,6 @@ child_num_proc
 rad_prior_reg
 mom_num_gastro_cond
 mom_num_peurp_compl
-religion
-color_fetal_surface
 gauss_cat_V1
 gauss_cat_V2
 gauss_cat_V3
@@ -25,3 +21,5 @@ gauss_cat_V7
 gauss_cat_V8
 gauss_cat_V9
 gauss_cat_V10
+gauss_cat_V11
+gauss_cat_V12
