@@ -32,7 +32,7 @@ cat_var_idx = np.array(cat_var_idx) - 1
 
 
 # Drop Y and W
-X =  black_data.drop(columns=["bweight","smoke"])
+X =  black_data.drop(columns=["Y","W"])
 
 
 # Split train test 80-20 and save index of train data for later
