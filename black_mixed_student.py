@@ -47,8 +47,9 @@ SigmaHat_mcd = mcd.covariance_
 # # np.min(np.linalg.eigvals(SigmaHat_mcd))
 # # SigmaHat_mcd = SigmaHat_mcd + (1e-6)*np.eye(SigmaHat_mcd.shape[0])
 # # np.min(np.linalg.eigvals(SigmaHat_mcd))
-if(np.min(np.linalg.eigvals(SigmaHat_mcd)) < 0):
-    SigmaHat_mcd = SigmaHat_mcd + (1e-3)*np.eye(SigmaHat_mcd.shape[0])
+# if(np.min(np.linalg.eigvals(SigmaHat_mcd)) < 0):
+#     print("yes")
+SigmaHat_mcd = SigmaHat_mcd + (1e-3)*np.eye(SigmaHat_mcd.shape[0])
 
 # X_train = X_train.values
 # myScaler = preprocessing.StandardScaler()
@@ -63,7 +64,7 @@ SigmaHat = SigmaHat_mcd
 #     SigmaHat = SigmaHat + (2e-3)*np.eye(SigmaHat.shape[0])
 
 # second_order = gk.GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp", regularizer=0.001)
-second_order = gk.GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp", regularizer=0.001)
+second_order = gk.GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp", regularizer=0)
 # corr_g = np.nan_to_num((np.diag(SigmaHat) - np.diag(second_order.Ds)) / np.diag(SigmaHat))
 corr_g = ((np.diag(SigmaHat) - np.diag(second_order.Ds)) / np.diag(SigmaHat))
 
