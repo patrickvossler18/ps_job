@@ -89,7 +89,7 @@ for combo in param_combos:
     # Set the parameters for training deep knockoffs
     pars = dict()
     # Number of epochs
-    pars['epochs'] = 50
+    pars['epochs'] = 25
     # Number of iterations over the full data per epoch
     pars['epoch_length'] = 50
     # Data type, either "continuous" or "binary"
@@ -115,7 +115,7 @@ for combo in param_combos:
     # Size of the test set
     pars['test_size'] = 0
     # Batch size
-    pars['batch_size'] = int(0.1*n)
+    pars['batch_size'] = int(0.3*n)
     # Learning rate
     pars['lr'] = 0.01
     # When to decrease learning rate (unused when equal to number of epochs)
