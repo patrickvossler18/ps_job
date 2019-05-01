@@ -73,8 +73,8 @@ training_params = parameters.GetTrainingHyperParams(model)
 p = X_train.shape[1]
 n = X_train.shape[0]
 
-a = np.linspace(0.01,0.001,num=5)
-b = np.linspace(0.01,0.001,num=5)
+a = np.linspace(0.0055,0.001,num=3)
+b = np.linspace(0.0055,0.001,num=2)
 
 param_combos = [(x,y) for x in a for y in b]
 
@@ -115,7 +115,7 @@ for combo in param_combos:
     # Size of the test set
     pars['test_size'] = 0
     # Batch size
-    pars['batch_size'] = int(0.3*n)
+    pars['batch_size'] = int(0.2*n)
     # Learning rate
     pars['lr'] = 0.01
     # When to decrease learning rate (unused when equal to number of epochs)
