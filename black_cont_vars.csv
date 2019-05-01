@@ -1,5 +1,7 @@
 variable
+terms
 mage
 meduc
 prenatal
 prenatal_visits
+"ifelse(terms > 0, 1, 0)"
