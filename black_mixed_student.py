@@ -44,7 +44,7 @@ mcd = MinCovDet().fit(X_train)
 SigmaHat_mcd = mcd.covariance_ 
 # if(np.min(np.linalg.eigvals(SigmaHat_mcd)) < 0):
 #     print("yes")
-SigmaHat_mcd = SigmaHat_mcd + (5e-2)*np.eye(SigmaHat_mcd.shape[0])
+SigmaHat_mcd = SigmaHat_mcd + (5e-4)*np.eye(SigmaHat_mcd.shape[0])
 
 
 SigmaHat = SigmaHat_mcd
@@ -70,12 +70,12 @@ training_params = parameters.GetTrainingHyperParams(model)
 p = X_train.shape[1]
 n = X_train.shape[0]
 
-training_params['LAMBDA'] = 0.1
-training_params['DELTA'] = 1.0
+# training_params['LAMBDA'] = 0.1
+# training_params['DELTA'] = 1.0
 # training_params['LAMBDA'] = 0.0032
 # training_params['DELTA'] = 0.001
-# training_params['LAMBDA'] = 0.001
-# training_params['DELTA'] = 0.0078
+training_params['LAMBDA'] = 0.001
+training_params['DELTA'] = 0.0078
 
 # Set the parameters for training deep knockoffs
 pars = dict()
