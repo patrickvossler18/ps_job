@@ -70,8 +70,10 @@ training_params = parameters.GetTrainingHyperParams(model)
 p = X_train.shape[1]
 n = X_train.shape[0]
 
-training_params['LAMBDA'] = 0.0032
-training_params['DELTA'] = 0.001
+training_params['LAMBDA'] = 0.1
+training_params['DELTA'] = 1.0
+# training_params['LAMBDA'] = 0.0032
+# training_params['DELTA'] = 0.001
 # training_params['LAMBDA'] = 0.001
 # training_params['DELTA'] = 0.0078
 
