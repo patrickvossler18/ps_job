@@ -106,7 +106,7 @@ pars['mixed_data'] = True
 # Size of the test set
 pars['test_size'] = 0
 # Batch size
-pars['batch_size'] = int(0.2*n)
+pars['batch_size'] = int(0.05*n)
 # pars['batch_size'] = 100
 # Learning rate
 pars['lr'] = 0.01
