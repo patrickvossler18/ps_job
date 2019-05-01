@@ -40,15 +40,19 @@ X_train = X.sample(frac=0.8,random_state=200)
 np.savetxt("/artifacts/black_train_msk.csv", X_train.index, delimiter=",")
 
 # Regularize the covariance and generate second order knockoffs
-mcd = MinCovDet().fit(X_train)
-SigmaHat_mcd = mcd.covariance_ 
-# if(np.min(np.linalg.eigvals(SigmaHat_mcd)) < 0):
-#     print("yes")
-SigmaHat_mcd = SigmaHat_mcd + (2e-4)*np.eye(SigmaHat_mcd.shape[0])
+# mcd = MinCovDet().fit(X_train)
+# SigmaHat_mcd = mcd.covariance_ 
+# # if(np.min(np.linalg.eigvals(SigmaHat_mcd)) < 0):
+# #     print("yes")
+# SigmaHat_mcd = SigmaHat_mcd + (2e-4)*np.eye(SigmaHat_mcd.shape[0])
 
 
-SigmaHat = SigmaHat_mcd
+# SigmaHat = SigmaHat_mcd
 
+SigmaHat_lw = ledoit_wolf(X_train)[0]
+# SigmaHat_lw = SigmaHat_lw + (2e-4)*np.eye(SigmaHat_lw.shape[0])
+
+SigmaHat = SigmaHat_lw
 
 # SigmaHat = np.cov(X_train, rowvar=False)
 # SigmaHat = SigmaHat + (1e-4)*np.eye(SigmaHat.shape[0])

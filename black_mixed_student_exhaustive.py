@@ -41,14 +41,14 @@ np.savetxt("/artifacts/black_train_msk.csv", X_train.index, delimiter=",")
 
 # Regularize the covariance and generate second order knockoffs
 
-# SigmaHat_lw = ledoit_wolf(X_train)[0]
-mcd = MinCovDet().fit(X_train)
-SigmaHat_mcd = mcd.covariance_ 
-# # np.min(np.linalg.eigvals(SigmaHat_mcd))
-# # SigmaHat_mcd = SigmaHat_mcd + (1e-6)*np.eye(SigmaHat_mcd.shape[0])
-# # np.min(np.linalg.eigvals(SigmaHat_mcd))
-if(np.min(np.linalg.eigvals(SigmaHat_mcd)) < 0):
-    SigmaHat_mcd = SigmaHat_mcd + (5e-4)*np.eye(SigmaHat_mcd.shape[0])
+SigmaHat_lw = ledoit_wolf(X_train)[0]
+# mcd = MinCovDet().fit(X_train)
+# SigmaHat_mcd = mcd.covariance_ 
+# # # np.min(np.linalg.eigvals(SigmaHat_mcd))
+# # # SigmaHat_mcd = SigmaHat_mcd + (1e-6)*np.eye(SigmaHat_mcd.shape[0])
+# # # np.min(np.linalg.eigvals(SigmaHat_mcd))
+# if(np.min(np.linalg.eigvals(SigmaHat_mcd)) < 0):
+#     SigmaHat_mcd = SigmaHat_mcd + (5e-4)*np.eye(SigmaHat_mcd.shape[0])
 
 # X_train = X_train.values
 # myScaler = preprocessing.StandardScaler()
@@ -57,7 +57,7 @@ if(np.min(np.linalg.eigvals(SigmaHat_mcd)) < 0):
 # shrunk_cov = covariance.shrunk_covariance(np.cov(X_train, rowvar=False), shrinkage=0.3)
 
 
-SigmaHat = SigmaHat_mcd
+SigmaHat = SigmaHat_lw
 # SigmaHat = np.cov(X_train, rowvar=False)
 # if(np.min(np.linalg.eigvals(SigmaHat)) < 0):
 #     SigmaHat = SigmaHat + (2e-3)*np.eye(SigmaHat.shape[0])
