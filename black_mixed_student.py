@@ -44,7 +44,7 @@ mcd = MinCovDet().fit(X_train)
 SigmaHat_mcd = mcd.covariance_ 
 # if(np.min(np.linalg.eigvals(SigmaHat_mcd)) < 0):
 #     print("yes")
-SigmaHat_mcd = SigmaHat_mcd + (5e-4)*np.eye(SigmaHat_mcd.shape[0])
+SigmaHat_mcd = SigmaHat_mcd + (5e-3)*np.eye(SigmaHat_mcd.shape[0])
 
 
 SigmaHat = SigmaHat_mcd
@@ -106,10 +106,10 @@ pars['mixed_data'] = True
 # Size of the test set
 pars['test_size'] = 0
 # Batch size
-# pars['batch_size'] = int(0.2*n)
-pars['batch_size'] = 100
+pars['batch_size'] = int(0.2*n)
+# pars['batch_size'] = 100
 # Learning rate
-pars['lr'] = 0.001
+pars['lr'] = 0.01
 # When to decrease learning rate (unused when equal to number of epochs)
 pars['lr_milestones'] = [pars['epochs']]
 # Width of the network (number of layers is fixed to 6)
