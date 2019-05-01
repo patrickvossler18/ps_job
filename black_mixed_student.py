@@ -40,20 +40,18 @@ X_train = X.sample(frac=0.8,random_state=200)
 np.savetxt("/artifacts/black_train_msk.csv", X_train.index, delimiter=",")
 
 # Regularize the covariance and generate second order knockoffs
-
-# SigmaHat_lw = ledoit_wolf(X_train)[0]
-# mcd = MinCovDet().fit(X_train)
-# SigmaHat_mcd = mcd.covariance_ 
-# # if(np.min(np.linalg.eigvals(SigmaHat_mcd)) < 0):
-# #     print("yes")
-# SigmaHat_mcd = SigmaHat_mcd + (5e-4)*np.eye(SigmaHat_mcd.shape[0])
+mcd = MinCovDet().fit(X_train)
+SigmaHat_mcd = mcd.covariance_ 
+# if(np.min(np.linalg.eigvals(SigmaHat_mcd)) < 0):
+#     print("yes")
+SigmaHat_mcd = SigmaHat_mcd + (2e-4)*np.eye(SigmaHat_mcd.shape[0])
 
 
-# SigmaHat = SigmaHat_mcd
+SigmaHat = SigmaHat_mcd
 
 
-SigmaHat = np.cov(X_train, rowvar=False)
-SigmaHat = SigmaHat + (5e-3)*np.eye(SigmaHat.shape[0])
+# SigmaHat = np.cov(X_train, rowvar=False)
+# SigmaHat = SigmaHat + (1e-4)*np.eye(SigmaHat.shape[0])
 # if(np.min(np.linalg.eigvals(SigmaHat)) < 0):
 #     SigmaHat = SigmaHat + (2e-3)*np.eye(SigmaHat.shape[0])
 
@@ -68,10 +66,10 @@ training_params = parameters.GetTrainingHyperParams(model)
 p = X_train.shape[1]
 n = X_train.shape[0]
 
-training_params['LAMBDA'] = 0.0032
-training_params['DELTA'] = 0.01
-# training_params['LAMBDA'] = 0.001
-# training_params['DELTA'] = 0.0078
+# training_params['LAMBDA'] = 0.0032
+# training_params['DELTA'] = 0.01
+training_params['LAMBDA'] = 0.001
+training_params['DELTA'] = 0.0078
 
 # Set the parameters for training deep knockoffs
 pars = dict()
