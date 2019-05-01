@@ -44,7 +44,7 @@ mcd = MinCovDet().fit(X_train)
 SigmaHat_mcd = mcd.covariance_ 
 # if(np.min(np.linalg.eigvals(SigmaHat_mcd)) < 0):
 #     print("yes")
-SigmaHat_mcd = SigmaHat_mcd + (5e-3)*np.eye(SigmaHat_mcd.shape[0])
+SigmaHat_mcd = SigmaHat_mcd + (1e-2)*np.eye(SigmaHat_mcd.shape[0])
 
 
 SigmaHat = SigmaHat_mcd
@@ -80,7 +80,7 @@ training_params['DELTA'] = 0.0078
 # Set the parameters for training deep knockoffs
 pars = dict()
 # Number of epochs
-pars['epochs'] = 50
+pars['epochs'] = 20
 # Number of iterations over the full data per epoch
 pars['epoch_length'] = 50
 # Data type, either "continuous" or "binary"
