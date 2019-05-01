@@ -49,7 +49,7 @@ SigmaHat_mcd = mcd.covariance_
 # # np.min(np.linalg.eigvals(SigmaHat_mcd))
 # if(np.min(np.linalg.eigvals(SigmaHat_mcd)) < 0):
 #     print("yes")
-SigmaHat_mcd = SigmaHat_mcd + (1e-3)*np.eye(SigmaHat_mcd.shape[0])
+SigmaHat_mcd = SigmaHat_mcd + (5e-4)*np.eye(SigmaHat_mcd.shape[0])
 
 # X_train = X_train.values
 # myScaler = preprocessing.StandardScaler()
@@ -108,7 +108,7 @@ pars['mixed_data'] = True
 # Size of the test set
 pars['test_size'] = 0
 # Batch size
-pars['batch_size'] = int(0.1*n)
+pars['batch_size'] = int(0.3*n)
 # Learning rate
 pars['lr'] = 0.01
 # When to decrease learning rate (unused when equal to number of epochs)
