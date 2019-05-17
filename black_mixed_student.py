@@ -81,9 +81,9 @@ training_params['DELTA'] = 0.0078
 # Set the parameters for training deep knockoffs
 pars = dict()
 # Number of epochs
-pars['epochs'] = 20
+pars['epochs'] = 50
 # Number of iterations over the full data per epoch
-pars['epoch_length'] = 50
+pars['epoch_length'] = 100
 # Data type, either "continuous" or "binary"
 pars['family'] = "continuous"
 # Dimensions of the data
