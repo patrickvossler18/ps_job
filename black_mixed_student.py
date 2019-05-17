@@ -45,7 +45,7 @@ mcd = MinCovDet().fit(X_train)
 SigmaHat_mcd = mcd.covariance_ 
 # if(np.min(np.linalg.eigvals(SigmaHat_mcd)) < 0):
 #     print("yes")
-SigmaHat_mcd = SigmaHat_mcd + (1e-2)*np.eye(SigmaHat_mcd.shape[0])
+SigmaHat_mcd = SigmaHat_mcd + (5e-4)*np.eye(SigmaHat_mcd.shape[0])
 
 
 SigmaHat = SigmaHat_mcd
