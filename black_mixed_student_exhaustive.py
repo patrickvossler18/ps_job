@@ -41,14 +41,14 @@ np.savetxt("/artifacts/black_train_msk.csv", X_train.index, delimiter=",")
 
 # Regularize the covariance and generate second order knockoffs
 
-SigmaHat_lw = ledoit_wolf(X_train)[0]
-# mcd = MinCovDet().fit(X_train)
-# SigmaHat_mcd = mcd.covariance_ 
-# # # np.min(np.linalg.eigvals(SigmaHat_mcd))
-# # # SigmaHat_mcd = SigmaHat_mcd + (1e-6)*np.eye(SigmaHat_mcd.shape[0])
-# # # np.min(np.linalg.eigvals(SigmaHat_mcd))
-# if(np.min(np.linalg.eigvals(SigmaHat_mcd)) < 0):
-#     SigmaHat_mcd = SigmaHat_mcd + (5e-4)*np.eye(SigmaHat_mcd.shape[0])
+# SigmaHat_lw = ledoit_wolf(X_train)[0]
+mcd = MinCovDet().fit(X_train)
+SigmaHat_mcd = mcd.covariance_ 
+# # np.min(np.linalg.eigvals(SigmaHat_mcd))
+# # SigmaHat_mcd = SigmaHat_mcd + (1e-6)*np.eye(SigmaHat_mcd.shape[0])
+# # np.min(np.linalg.eigvals(SigmaHat_mcd))
+if(np.min(np.linalg.eigvals(SigmaHat_mcd)) < 0):
+    SigmaHat_mcd = SigmaHat_mcd + (5e-4)*np.eye(SigmaHat_mcd.shape[0])
 
 # X_train = X_train.values
 # myScaler = preprocessing.StandardScaler()
@@ -57,7 +57,7 @@ SigmaHat_lw = ledoit_wolf(X_train)[0]
 # shrunk_cov = covariance.shrunk_covariance(np.cov(X_train, rowvar=False), shrinkage=0.3)
 
 
-SigmaHat = SigmaHat_lw
+SigmaHat = SigmaHat_mcd
 # SigmaHat = np.cov(X_train, rowvar=False)
 # if(np.min(np.linalg.eigvals(SigmaHat)) < 0):
 #     SigmaHat = SigmaHat + (2e-3)*np.eye(SigmaHat.shape[0])
@@ -74,7 +74,7 @@ p = X_train.shape[1]
 n = X_train.shape[0]
 
 a = np.linspace(0.0055,0.001,num=3)
-b = np.linspace(0.0055,0.001,num=2)
+b = np.linspace(0.0055,0.001,num=3)
 
 param_combos = [(x,y) for x in a for y in b]
 
@@ -89,7 +89,7 @@ for combo in param_combos:
     # Set the parameters for training deep knockoffs
     pars = dict()
     # Number of epochs
-    pars['epochs'] = 25
+    pars['epochs'] = 50
     # Number of iterations over the full data per epoch
     pars['epoch_length'] = 50
     # Data type, either "continuous" or "binary"
