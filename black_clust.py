@@ -19,7 +19,7 @@ from itertools import chain
 model = "mixed_student"
 
 # Load data
-black_data = pd.read_csv("black_clean.csv")
+black_data = pd.read_csv("black_clust.csv")
 
 
 
