@@ -43,7 +43,7 @@ np.savetxt("/artifacts/black_train_msk.csv", X_train.index, delimiter=",")
 mcd = MinCovDet().fit(X_train)
 SigmaHat_mcd = mcd.covariance_ 
 
-SigmaHat_mcd = SigmaHat_mcd + (1e-5)*np.eye(SigmaHat_mcd.shape[0])
+SigmaHat_mcd = SigmaHat_mcd + (1e-3)*np.eye(SigmaHat_mcd.shape[0])
 
 
 SigmaHat = SigmaHat_mcd
