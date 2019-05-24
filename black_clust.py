@@ -67,9 +67,9 @@ pars['family'] = "continuous"
 # Dimensions of the data
 pars['p'] = p
 # List of categorical variables
-# pars['cat_var_idx'] = cat_var_idx
-# # Number of categories for each categorical variable
-# pars['chunk_list'] = chunk_list
+pars['cat_var_idx'] = []
+# Number of categories for each categorical variable
+pars['chunk_list'] = []
 # # Number of categories
 # pars['num_cuts'] = num_cuts
 # Size of regularizer
