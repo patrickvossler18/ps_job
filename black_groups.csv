@@ -1,9 +1,9 @@
 var_names,groups
 male,1
 married,2
-mage,2
-meduc,2
-prenatal,3
-prenatal_visits,4
-pc_inc,5
-popdens,5
+mage,3
+meduc,3
+prenatal,4
+prenatal_visits,5
+pc_inc,6
+popdens,7
