@@ -20,6 +20,13 @@ model = "mixed_student"
 
 # Load data
 black_data = pd.read_csv("black_clust.csv")
+factor_list = pd.read_csv("black_factor_list.csv").values.tolist()
+chunk_list = pd.read_csv("black_chunk_list.csv").values.tolist()
+cat_var_idx = pd.read_csv("black_cat_var_idx.csv").values.tolist()
+factor_list = list(chain(*factor_list))
+chunk_list = list(chain(*chunk_list))
+cat_var_idx = list(chain(*cat_var_idx))
+cat_var_idx = np.array(cat_var_idx) - 1
 
 
 
@@ -36,7 +43,7 @@ np.savetxt("/artifacts/black_train_msk.csv", X_train.index, delimiter=",")
 mcd = MinCovDet().fit(X_train)
 SigmaHat_mcd = mcd.covariance_ 
 
-SigmaHat_mcd = SigmaHat_mcd + (1e-3)*np.eye(SigmaHat_mcd.shape[0])
+SigmaHat_mcd = SigmaHat_mcd + (1e-5)*np.eye(SigmaHat_mcd.shape[0])
 
 
 SigmaHat = SigmaHat_mcd
@@ -67,9 +74,9 @@ pars['family'] = "continuous"
 # Dimensions of the data
 pars['p'] = p
 # List of categorical variables
-pars['cat_var_idx'] = []
+pars['cat_var_idx'] = cat_var_idx
 # Number of categories for each categorical variable
-pars['chunk_list'] = []
+pars['chunk_list'] = chunk_list
 # # Number of categories
 # pars['num_cuts'] = num_cuts
 # Size of regularizer
@@ -81,7 +88,7 @@ pars['kappa'] = 1
 # Boolean for using the different decorr loss function from the paper
 pars['diff_decorr'] = False
 # Boolean for using mixed data in forward function
-pars['mixed_data'] = False
+pars['mixed_data'] = True
 # Size of the test set
 pars['test_size'] = 0
 # Batch size
