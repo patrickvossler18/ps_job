@@ -117,9 +117,9 @@ for p in p_list:
         par_lambda = str(np.round(combo[0],4))
         par_delta = str(np.round(combo[1],4))
         # Save parameters
-        np.save('/artifacts/pars' + "_" + par_lambda + "_" + par_delta+ 'p' + p +'.npy', pars)
+        np.save('/artifacts/pars' + "_" + par_lambda + "_" + par_delta+ 'p' + str(p) +'.npy', pars)
 
-        model = model + "_" + par_lambda + "_" + par_delta + 'p' + p
+        model = model + "_" + par_lambda + "_" + par_delta + 'p' + str(p)
 
         # Where to store the machine
         checkpoint_name = "/artifacts/" + model
