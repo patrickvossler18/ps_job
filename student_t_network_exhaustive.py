@@ -10,7 +10,7 @@ from sklearn.covariance import MinCovDet, LedoitWolf
 # Number of features
 p_list = [50, 100, 200]
 for p in p_list:
-
+    print(p)
     # Load the built-in multivariate Student's-t model and its default parameters
     # The currently available built-in models are:
     # - gaussian : Multivariate Gaussian distribution
