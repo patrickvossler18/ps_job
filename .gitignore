@@ -3,3 +3,10 @@ key.txt
 
 *.pyc
 .Rhistory
+.idea/workspace.xml
+.idea/vcs.xml
+.idea/ps_job.iml
+.idea/other.xml
+.idea/modules.xml
+.idea/misc.xml
+.idea/libraries/R_User_Library.xml

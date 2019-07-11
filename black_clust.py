@@ -29,14 +29,13 @@ cat_var_idx = list(chain(*cat_var_idx))
 cat_var_idx = np.array(cat_var_idx) - 1
 
 
-
 # Drop Y and W
-X =  black_data.drop(columns=["Y","W"])
+X = black_data.drop(columns=["Y", "W"])
 
 
 # Split train test 80-20 and save index of train data for later
 # X_train = X.sample(frac=0.8,random_state=200)
-X_train = X.sample(frac=0.2,random_state=200)
+X_train = X.sample(frac=0.2, random_state=200)
 np.savetxt("/artifacts/black_train_msk.csv", X_train.index, delimiter=",")
 
 # Regularize the covariance and generate second order knockoffs
