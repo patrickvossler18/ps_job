@@ -26,7 +26,7 @@ for p in p_list:
     # - mstudent : Multivariate Student's-t distribution
     # - sparse   : Multivariate sparse Gaussian distribution
     # model = "mixed_student"
-    model = "mixed_student"
+    model = "mixed"
     distribution_params = parameters.GetDistributionParams(model, p)
 
     # Initialize the data generator
