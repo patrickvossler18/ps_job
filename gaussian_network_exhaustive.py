@@ -40,7 +40,7 @@ for p in p_list:
     # mcd = MinCovDet().fit(X_train)
     # SigmaHat = mcd.covariance_ 
 
-    SigmaHat= SigmaHat + (1e-1)*np.eye(SigmaHat.shape[0])
+    SigmaHat= SigmaHat + (3e-1)*np.eye(SigmaHat.shape[0])
 
     # TO USE LATER
     # regularizer = np.array([1e-1]*(num_cuts*ncat)+[1e-1]*(SigmaHat.shape[1]-(num_cuts*ncat)))
