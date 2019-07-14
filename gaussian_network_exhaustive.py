@@ -8,7 +8,7 @@ import parameters
 from sklearn.covariance import MinCovDet, LedoitWolf
 
 # Number of features
-p_list = [50, 100, 200]
+p_list = [100, 200]
 for p in p_list:
     print(p)
     # p = 50
@@ -40,7 +40,7 @@ for p in p_list:
     # mcd = MinCovDet().fit(X_train)
     # SigmaHat = mcd.covariance_ 
 
-    SigmaHat= SigmaHat + (2e-1)*np.eye(SigmaHat.shape[0])
+    SigmaHat= SigmaHat + (1e-1)*np.eye(SigmaHat.shape[0])
 
     # TO USE LATER
     # regularizer = np.array([1e-1]*(num_cuts*ncat)+[1e-1]*(SigmaHat.shape[1]-(num_cuts*ncat)))
@@ -65,7 +65,7 @@ for p in p_list:
     param_combos = [(x,y) for x in a for y in b]
 
     for combo in param_combos:
-        model="mstudent"
+        model="gaussian"
         print(combo)
         # Set the parameters for training deep knockoffs
         pars = dict()
@@ -89,7 +89,7 @@ for p in p_list:
         pars['use_weighting'] = False
         # Multiplier for weighting discrete variables
         pars['kappa'] = 1
-        # Boolean for using the different decorr loss function from the paper
+        # Boolean for using the different decorr loss function from the apper
         pars['diff_decorr'] = False
         # Boolean for using mixed data in forward function
         pars['mixed_data'] = False
