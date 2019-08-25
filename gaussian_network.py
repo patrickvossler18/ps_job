@@ -5,6 +5,8 @@ import data
 import parameters
 from sklearn.covariance import MinCovDet, LedoitWolf
 
+MODEL_DIRECTORY = "/home/pvossler/cm_idea/"
+
 # Number of features
 p = 50
 
@@ -103,13 +105,13 @@ pars['alphas'] = [1., 2., 4., 8., 16., 32., 64., 128.]
 
 
 # Save parameters
-np.save('/artifacts/pars.npy', pars)
+np.save(MODEL_DIRECTORY + 'pars.npy', pars)
 
 # Where to store the machine
-checkpoint_name = "/artifacts/" + model
+checkpoint_name = MODEL_DIRECTORY + model
 
 # Where to print progress information
-logs_name = "/artifacts/" + model + "_progress.txt"
+logs_name = MODEL_DIRECTORY + model + "_progress.txt"
 
 # Initialize the machine
 machine = KnockoffMachine(pars, checkpoint_name=checkpoint_name, logs_name=logs_name)
