@@ -17,6 +17,7 @@ from sklearn.covariance import MinCovDet, LedoitWolf
 # Number of features
 p_list = [50, 100, 200]
 for p in p_list:
+    p_list_p
     print(p)
 
     # Load the built-in multivariate Student's-t model and its default parameters
@@ -136,9 +137,9 @@ for p in p_list:
         par_lambda = str(np.round(combo[0],4))
         par_delta = str(np.round(combo[1],4))
         # Save parameters
-        np.save('/artifacts/pars' + "_" + par_lambda + "_" + par_delta+ 'p' + str(p) +'.npy', pars)
+        np.save('/artifacts/pars' + "_" + par_lambda + "_" + par_delta+ 'p' + str(p_list_p) +'.npy', pars)
 
-        model = model + "_" + par_lambda + "_" + par_delta + 'p' + str(p)
+        model = model + "_" + par_lambda + "_" + par_delta + 'p' + str(p_list_p)
 
         # Where to store the machine
         checkpoint_name = "/artifacts/" + model
