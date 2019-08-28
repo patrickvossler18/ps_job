@@ -5,6 +5,10 @@ import data
 import parameters
 from sklearn.covariance import MinCovDet, LedoitWolf
 
+import datetime 
+now = datetime.datetime.now()
+timestamp = now.strftime('%Y-%m-%dT%H:%M:%S') + ('-%02d' % (now.microsecond / 10000))
+
 MODEL_DIRECTORY = "/home/pvossler/cm_idea/"
 
 # Number of features
@@ -105,13 +109,13 @@ pars['alphas'] = [1., 2., 4., 8., 16., 32., 64., 128.]
 
 
 # Save parameters
-np.save(MODEL_DIRECTORY + 'pars.npy', pars)
+np.save(MODEL_DIRECTORY + 'pars' + timestamp + '.npy', pars)
 
 # Where to store the machine
-checkpoint_name = MODEL_DIRECTORY + model
+checkpoint_name = MODEL_DIRECTORY + model + timestamp
 
 # Where to print progress information
-logs_name = MODEL_DIRECTORY + model + "_progress.txt"
+logs_name = MODEL_DIRECTORY + model + timestamp + "_progress.txt"
 
 # Initialize the machine
 machine = KnockoffMachine(pars, checkpoint_name=checkpoint_name, logs_name=logs_name)
