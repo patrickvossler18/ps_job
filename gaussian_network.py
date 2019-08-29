@@ -12,7 +12,7 @@ timestamp = now.strftime('%Y-%m-%dT%H:%M:%S') + ('-%02d' % (now.microsecond / 10
 MODEL_DIRECTORY = "/home/pvossler/cm_idea/"
 
 # Number of features
-p = 50
+p = 100
 
 # Load the built-in multivariate Student's-t model and its default parameters
 # The currently available built-in models are:
@@ -40,7 +40,7 @@ X_train = DataSampler.sample(n)
 SigmaHat = np.cov(X_train, rowvar=False)
 # mcd = MinCovDet().fit(X_train)
 # SigmaHat = mcd.covariance_ 
-SigmaHat= SigmaHat + (4e-2)*np.eye(SigmaHat.shape[0])
+SigmaHat= SigmaHat + (2e-3)*np.eye(SigmaHat.shape[0])
 
 # TO USE LATER
 # regularizer = np.array([1e-1]*(num_cuts*ncat)+[0]*(SigmaHat.shape[1]-(num_cuts*ncat)))
