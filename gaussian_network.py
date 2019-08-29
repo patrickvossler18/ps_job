@@ -12,7 +12,7 @@ timestamp = now.strftime('%Y-%m-%dT%H:%M:%S') + ('-%02d' % (now.microsecond / 10
 MODEL_DIRECTORY = "/home/pvossler/cm_idea/"
 
 # Number of features
-p = 150
+p = 300
 
 # Load the built-in multivariate Student's-t model and its default parameters
 # The currently available built-in models are:
@@ -27,7 +27,7 @@ distribution_params = parameters.GetDistributionParams(model, p)
 DataSampler = data.DataSampler(distribution_params)
 
 # Number of training examples
-n = 1000
+n = 10000
 
 # not used but included in dictionary
 ncat = p/2
@@ -40,7 +40,7 @@ X_train = DataSampler.sample(n)
 SigmaHat = np.cov(X_train, rowvar=False)
 # mcd = MinCovDet().fit(X_train)
 # SigmaHat = mcd.covariance_ 
-SigmaHat= SigmaHat + (2e-1)*np.eye(SigmaHat.shape[0])
+SigmaHat= SigmaHat + (2e-3)*np.eye(SigmaHat.shape[0])
 
 # TO USE LATER
 # regularizer = np.array([1e-1]*(num_cuts*ncat)+[0]*(SigmaHat.shape[1]-(num_cuts*ncat)))
@@ -62,7 +62,7 @@ p = X_train.shape[1]
 # Set the parameters for training deep knockoffs
 pars = dict()
 # Number of epochs
-pars['epochs'] = 100
+pars['epochs'] = 50
 # Number of iterations over the full data per epoch
 pars['epoch_length'] = 100
 # Data type, either "continuous" or "binary"
