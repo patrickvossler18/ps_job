@@ -59,8 +59,8 @@ corr_g = (np.diag(SigmaHat) - np.diag(second_order.Ds)) / np.diag(SigmaHat)
 print(np.average(corr_g))
 
 training_params = parameters.GetTrainingHyperParams(model)
-# training_params['LAMBDA'] = 0.001
-# training_params['DELTA'] = 0.05
+training_params['LAMBDA'] = 0.001
+training_params['DELTA'] = 0.05
 
 
 p = X_train.shape[1]
