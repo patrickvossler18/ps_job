@@ -12,7 +12,7 @@ timestamp = now.strftime('%Y-%m-%dT%H:%M:%S') + ('-%02d' % (now.microsecond / 10
 MODEL_DIRECTORY = "/home/pvossler/cm_idea/"
 
 # Number of features
-p = 200
+p = 150
 
 # Load the built-in multivariate Student's-t model and its default parameters
 # The currently available built-in models are:
