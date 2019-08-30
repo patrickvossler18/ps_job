@@ -4,9 +4,10 @@ from DeepKnockoffs import GaussianKnockoffs
 import data
 import parameters
 from sklearn.covariance import MinCovDet, LedoitWolf
-from scipy.linalg import toeplitz, cholesky
-
+import utils
 import datetime 
+
+
 now = datetime.datetime.now()
 timestamp = now.strftime('%Y-%m-%dT%H:%M:%S') + ('-%02d' % (now.microsecond / 10000))
 
@@ -28,23 +29,15 @@ distribution_params = parameters.GetDistributionParams(model, p)
 DataSampler = data.DataSampler(distribution_params)
 
 # Number of training examples
-n = 10000
+n = 1000
 
 # not used but included in dictionary
-# ncat = p/2
-# cat_columns = np.arange(0, ncat)
-# num_cuts = 4
+ncat = p/2
+cat_columns = np.arange(0, ncat)
+num_cuts = 4
 
 # Sample training data
 X_train = DataSampler.sample(n)
-
-
-# simulation covariance matrix (AR(1) process)
-r = 0.5
-real_cov = toeplitz(r ** np.arange(p))
-coloring_matrix = cholesky(real_cov)
-X_train = np.dot(np.random.normal(size=(n, p)), coloring_matrix.T)
-
 
 SigmaHat = np.cov(X_train, rowvar=False)
 # mcd = MinCovDet().fit(X_train)
@@ -57,11 +50,21 @@ SigmaHat = np.cov(X_train, rowvar=False)
 # second_order = gk.GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp", regularizer=regularizer)
 
 # Initialize generator of second-order knockoffs
-second_order = GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp")
+identity_p = np.identity(p)
+Sigma_inv = np.linalg.solve(SigmaHat, identity_p)
 
-# Measure pairwise second-order knockoff correlations
-corr_g = (np.diag(SigmaHat) - np.diag(second_order.Ds)) / np.diag(SigmaHat)
+def ASDPoptim(Sigma, Sigma_inv, block_size, approx_method):
+        sol = utils.asdp(Sigma, block_size, approx_method)
+        s = np.diag(np.array(sol).flatten())
+        C2 = 2. * s - np.dot(s, np.dot(Sigma_inv, s))        
+        return(C2, s)
 
+C2, s = ASDPoptim(SigmaHat, Sigma_inv,50, approx_method="selfblocks")
+
+
+Ds = np.multiply(s,np.diag(SigmaHat))
+
+corr_g = (np.diag(SigmaHat) - np.diag(Ds)) / np.diag(SigmaHat)
 print(np.average(corr_g))
 
 training_params = parameters.GetTrainingHyperParams(model)
@@ -71,19 +74,36 @@ p = X_train.shape[1]
 # Set the parameters for training deep knockoffs
 pars = dict()
 # Number of epochs
-pars['epochs'] = 50
+pars['epochs'] = 1000
 # Number of iterations over the full data per epoch
 pars['epoch_length'] = 100
 # Data type, either "continuous" or "binary"
 pars['family'] = "continuous"
 # Dimensions of the data
 pars['p'] = p
+# pars['ncat'] = ncat
+# # List of categorical variables
+# pars['cat_var_idx'] = np.arange(0, (ncat * (num_cuts)))
+# # Number of discrete variables
+# pars['ncat'] = ncat
+# # Number of categories
+# pars['num_cuts'] = num_cuts
+# # Size of regularizer
+# # pars['regularizer'] = grid_results[0]
+# # Boolean for using different weighting structure for decorr
+# pars['use_weighting'] = False
+# # Multiplier for weighting discrete variables
+# pars['kappa'] = 1
+# # Boolean for using the different decorr loss function from the paper
+# pars['diff_decorr'] = False
+# # Boolean for using mixed data in forward function
+# pars['mixed_data'] = False
 # Size of the test set
 pars['test_size'] = 0
 # Batch size
 pars['batch_size'] = int(0.5*n)
 # Learning rate
-pars['lr'] = 0.01
+pars['lr'] = 0.005
 # When to decrease learning rate (unused when equal to number of epochs)
 pars['lr_milestones'] = [pars['epochs']]
 # Width of the network (number of layers is fixed to 6)
