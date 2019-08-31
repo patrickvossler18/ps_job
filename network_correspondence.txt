@@ -1,0 +1,4 @@
+NETWORK CORRESPONDENCE:
+
+p = 50, gaussian, gaussian2019-08-30T17:27:35-44
+p = 100, gaussian, gaussian2019-08-28T20:03:19-06
