@@ -134,3 +134,5 @@ machine = KnockoffMachine(pars, checkpoint_name=checkpoint_name, logs_name=logs_
 
 # Train the machine
 machine.train(X_train)
+
+print(timestamp)

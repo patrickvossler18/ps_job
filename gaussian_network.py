@@ -13,7 +13,7 @@ timestamp = now.strftime('%Y-%m-%dT%H:%M:%S') + ('-%02d' % (now.microsecond / 10
 MODEL_DIRECTORY = "/home/pvossler/cm_idea/"
 
 # Number of features
-p = 300
+p = 50
 
 # Load the built-in multivariate Student's-t model and its default parameters
 # The currently available built-in models are:
@@ -28,7 +28,7 @@ distribution_params = parameters.GetDistributionParams(model, p)
 DataSampler = data.DataSampler(distribution_params)
 
 # Number of training examples
-n = 10000
+n = 1000
 
 # not used but included in dictionary
 # ncat = p/2
@@ -40,10 +40,10 @@ X_train = DataSampler.sample(n)
 
 
 # simulation covariance matrix (AR(1) process)
-r = 0.5
-real_cov = toeplitz(r ** np.arange(p))
-coloring_matrix = cholesky(real_cov)
-X_train = np.dot(np.random.normal(size=(n, p)), coloring_matrix.T)
+# r = 0.5
+# real_cov = toeplitz(r ** np.arange(p))
+# coloring_matrix = cholesky(real_cov)
+# X_train = np.dot(np.random.normal(size=(n, p)), coloring_matrix.T)
 
 
 SigmaHat = np.cov(X_train, rowvar=False)
