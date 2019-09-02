@@ -8,7 +8,7 @@ import utils
 import datetime 
 
 for p_size in [300,500]:
-
+    print(p_size)
     now = datetime.datetime.now()
     timestamp = now.strftime('%Y-%m-%dT%H:%M:%S') + ('-%02d' % (now.microsecond / 10000))
 
