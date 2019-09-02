@@ -1,4 +1,4 @@
 NETWORK CORRESPONDENCE:
 
-p = 50, gaussian, gaussian2019-08-30T17:27:35-44
-p = 100, gaussian, gaussian2019-08-28T20:03:19-06
+p = 50, gaussian,reg=none, epoch=100, 2019-08-30T18:15:18-92, need to figure out if used regularization or not
+p = 100, gaussian,reg=??, epoch=100, gaussian2019-08-28T20:03:19-06
