@@ -123,13 +123,13 @@ for p_size in [300,500]:
 
 
     # Save parameters
-    np.save(MODEL_DIRECTORY + 'pars' + '_p_' + p_size + timestamp + '.npy', pars)
+    np.save(MODEL_DIRECTORY + 'pars' + '_p_' + int(p_size) + timestamp + '.npy', pars)
 
     # Where to store the machine
-    checkpoint_name = MODEL_DIRECTORY + model + timestamp + '_p_' + p_size 
+    checkpoint_name = MODEL_DIRECTORY + model + timestamp + '_p_' + int(p_size) 
 
     # Where to print progress information
-    logs_name = MODEL_DIRECTORY + model + timestamp + '_p_' + p_size  + "_progress.txt"
+    logs_name = MODEL_DIRECTORY + model + timestamp + '_p_' + int(p_size)  + "_progress.txt"
 
     # Initialize the machine
     machine = KnockoffMachine(pars, checkpoint_name=checkpoint_name, logs_name=logs_name)
