@@ -1,20 +1,22 @@
 import numpy as np
-import pandas as pd
 from DeepKnockoffs import KnockoffMachine
 from DeepKnockoffs import GaussianKnockoffs
-import gk
 import data
 import parameters
 from sklearn.covariance import MinCovDet, LedoitWolf
-
+import utils
 import datetime 
+
+# for p_size in [300,500]:
+# print(p_size)
 now = datetime.datetime.now()
 timestamp = now.strftime('%Y-%m-%dT%H:%M:%S') + ('-%02d' % (now.microsecond / 10000))
 
 MODEL_DIRECTORY = "/home/pvossler/cm_idea/"
 
 # Number of features
-p = 100
+# p = 300
+p = 300
 
 # Load the built-in multivariate Student's-t model and its default parameters
 # The currently available built-in models are:
@@ -32,7 +34,7 @@ DataSampler = data.DataSampler(distribution_params)
 n = 1000
 
 # not used but included in dictionary
-ncat = int(p/2)
+ncat = p/2
 cat_columns = np.arange(0, ncat)
 num_cuts = 4
 
@@ -42,33 +44,39 @@ X_train = DataSampler.sample(n)
 SigmaHat = np.cov(X_train, rowvar=False)
 # mcd = MinCovDet().fit(X_train)
 # SigmaHat = mcd.covariance_ 
-
-SigmaHat= SigmaHat + (2e-3)*np.eye(SigmaHat.shape[0])
+# SigmaHat= SigmaHat + (2e-3)*np.eye(SigmaHat.shape[0])
 
 # TO USE LATER
-# regularizer = np.array([1e-1]*(num_cuts*ncat)+[1e-1]*(SigmaHat.shape[1]-(num_cuts*ncat)))
+# regularizer = np.array([1e-1]*(num_cuts*ncat)+[0]*(SigmaHat.shape[1]-(num_cuts*ncat)))
 # # Initialize generator of second-order knockoffs
-# second_order = gk.GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp", regularizer=1e-1)
+# second_order = gk.GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp", regularizer=regularizer)
 
 # Initialize generator of second-order knockoffs
-second_order = GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp")
+identity_p = np.identity(p)
+Sigma_inv = np.linalg.solve(SigmaHat, identity_p)
 
-# Measure pairwise second-order knockoff correlations
-corr_g = (np.diag(SigmaHat) - np.diag(second_order.Ds)) / np.diag(SigmaHat)
+def ASDPoptim(Sigma, Sigma_inv, block_size, approx_method):
+        sol = utils.asdp(Sigma, block_size, approx_method)
+        s = np.diag(np.array(sol).flatten())
+        C2 = 2. * s - np.dot(s, np.dot(Sigma_inv, s))        
+        return(C2, s)
 
+C2, s = ASDPoptim(SigmaHat, Sigma_inv,50, approx_method="selfblocks")
+
+
+Ds = np.multiply(s,np.diag(SigmaHat))
+
+corr_g = (np.diag(SigmaHat) - np.diag(Ds)) / np.diag(SigmaHat)
 print(np.average(corr_g))
 
 training_params = parameters.GetTrainingHyperParams(model)
-training_params['LAMBDA'] = 0.001
-training_params['DELTA'] = 0.05
-
 
 p = X_train.shape[1]
 
 # Set the parameters for training deep knockoffs
 pars = dict()
 # Number of epochs
-pars['epochs'] = 50
+pars['epochs'] = 100
 # Number of iterations over the full data per epoch
 pars['epoch_length'] = 100
 # Data type, either "continuous" or "binary"
@@ -86,12 +94,12 @@ pars['p'] = p
 # # pars['regularizer'] = grid_results[0]
 # # Boolean for using different weighting structure for decorr
 # pars['use_weighting'] = False
-# # Boolean for using mixed data in forward function
-# pars['mixed_data'] = False
 # # Multiplier for weighting discrete variables
 # pars['kappa'] = 1
 # # Boolean for using the different decorr loss function from the paper
 # pars['diff_decorr'] = False
+# # Boolean for using mixed data in forward function
+# pars['mixed_data'] = False
 # Size of the test set
 pars['test_size'] = 0
 # Batch size
@@ -128,3 +136,5 @@ machine = KnockoffMachine(pars, checkpoint_name=checkpoint_name, logs_name=logs_
 
 # Train the machine
 machine.train(X_train)
+
+print(timestamp)
