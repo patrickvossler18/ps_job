@@ -57,7 +57,6 @@ for p_size in [300,500]:
 
     # Apply average-linkage hierarchical clustering
     # linkage = spc.linkage(pdist, method='average')
-    linkage = spc.linkage(pdist,method='complete')
 
     pdist = spc.distance.pdist(SigmaHat)
     linkage = spc.linkage(pdist, method='complete')
