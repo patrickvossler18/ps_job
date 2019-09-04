@@ -44,7 +44,7 @@ for p_size in [300,500]:
     SigmaHat = np.cov(X_train, rowvar=False)
     # mcd = MinCovDet().fit(X_train)
     # SigmaHat = mcd.covariance_ 
-    SigmaHat= SigmaHat + (8e-3)*np.eye(SigmaHat.shape[0])
+    SigmaHat= SigmaHat + (2e-3)*np.eye(SigmaHat.shape[0])
 
     # TO USE LATER
     # regularizer = np.array([1e-1]*(num_cuts*ncat)+[0]*(SigmaHat.shape[1]-(num_cuts*ncat)))
@@ -70,7 +70,10 @@ for p_size in [300,500]:
     print(np.average(corr_g))
 
     training_params = parameters.GetTrainingHyperParams(model)
-
+    training_params['LAMBDA'] = 0.001
+    training_params['DELTA'] = 0.05
+    
+    
     p = X_train.shape[1]
 
     # Set the parameters for training deep knockoffs

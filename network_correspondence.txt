@@ -4,5 +4,5 @@ p = 50, gaussian,reg=none, epoch=100, 2019-08-30T18:15:18-92, need to figure out
 p = 100, gaussian,reg=??, epoch=100,2019-08-28T20:03:19-06
 p = 300, gaussian,reg=none,epoch=500,2019-09-01T23:10:17-12,lr = 0.001
 p = 500, gaussian,reg=none,epoch=500,2019-09-02T11:16:20-12,lr=0.005
-p = 300, mstudent,reg=2e-1,epoch=100,2019-09-03T17:39:15-34_p_300,lr =0.01
-p = 500, mstudent,reg=2e-1,epoch=100,2019-09-03T17:54:33-33_p_500,lr =0.01
+p = 300, mstudent,reg=2e-1,epoch=100,2019-09-04T09:49:22-50_p_300,lr =0.01
+p = 500, mstudent,reg=2e-1,epoch=100,2019-09-04T10:03:57-57_p_500,lr =0.01
