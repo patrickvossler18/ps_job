@@ -47,11 +47,11 @@ for p in p_list:
 
     # SigmaHat = np.cov(X_train, rowvar=False)
     mcd = MinCovDet().fit(X_train)
-    SigmaHat_mcd = mcd.covariance_ 
+    SigmaHat = mcd.covariance_ 
     
     SigmaHat= SigmaHat + (2e-3)*np.eye(SigmaHat.shape[0])
 
-    second_order = gk.GaussianKnockoffs(SigmaHat_mcd, mu=np.mean(X_train, 0), method="sdp", regularizer=1e-1)
+    # second_order = gk.GaussianKnockoffs(SigmaHat_mcd, mu=np.mean(X_train, 0), method="sdp", regularizer=1e-1)
     # second_order = gk.GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp", regularizer=1e-1)
 
     second_order = GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp")
