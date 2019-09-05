@@ -45,9 +45,9 @@ for p in p_list:
     X_train_dums = pd.get_dummies(X_train.iloc[:, cat_columns], prefix=X_train.iloc[:, cat_columns].columns.values.astype(str).tolist())
     X_train = pd.concat([X_train_dums.reset_index(drop=True), X_train.drop(cat_columns, axis=1).reset_index(drop=True)], axis=1)
 
-    SigmaHat = np.cov(X_train, rowvar=False)
-    # mcd = MinCovDet().fit(X_train)
-    # SigmaHat = mcd.covariance_ 
+    # SigmaHat = np.cov(X_train, rowvar=False)
+    mcd = MinCovDet().fit(X_train)
+    SigmaHat = mcd.covariance_ 
 
     SigmaHat= SigmaHat + (2e-3)*np.eye(SigmaHat.shape[0])
 
@@ -65,6 +65,8 @@ for p in p_list:
     print(np.average(corr_g[((num_cuts*ncat)+1):((num_cuts*ncat)+ int(p/2))]))
 
     training_params = parameters.GetTrainingHyperParams(model)
+    training_params['LAMBDA'] = 0.0078
+    training_params['DELTA'] = 0.0078
     p = X_train.shape[1]
     print(p)
     print(X_train.shape)
@@ -73,7 +75,7 @@ for p in p_list:
         # Set the parameters for training deep knockoffs
     pars = dict()
     # Number of epochs
-    pars['epochs'] = 100
+    pars['epochs'] = 50
     # Number of iterations over the full data per epoch
     pars['epoch_length'] = 100
     # Data type, either "continuous" or "binary"
