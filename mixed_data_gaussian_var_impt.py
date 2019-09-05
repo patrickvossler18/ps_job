@@ -34,7 +34,7 @@ for p in p_list:
 
     # Number of training examples
     n = 1000
-    ncat = int(p/4)
+    ncat = int(p/2)
     cat_columns = np.arange(0, ncat)
     num_cuts = 4
 
@@ -48,8 +48,8 @@ for p in p_list:
     SigmaHat = np.cov(X_train, rowvar=False)
     # mcd = MinCovDet().fit(X_train)
     # SigmaHat = mcd.covariance_ 
-    
-    SigmaHat= SigmaHat + (2e-3)*np.eye(SigmaHat.shape[0])
+
+    SigmaHat= SigmaHat + (2e-1)*np.eye(SigmaHat.shape[0])
 
     # second_order = gk.GaussianKnockoffs(SigmaHat_mcd, mu=np.mean(X_train, 0), method="sdp", regularizer=1e-1)
     # second_order = gk.GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp", regularizer=1e-1)
@@ -62,14 +62,14 @@ for p in p_list:
     print(np.average(corr_g))
 
     print(np.average(corr_g[1:(num_cuts*ncat)]))
-    print(np.average(corr_g[((num_cuts*ncat)+1):((num_cuts*ncat)+ int(p/4))]))
+    print(np.average(corr_g[((num_cuts*ncat)+1):((num_cuts*ncat)+ int(p/2))]))
 
     training_params = parameters.GetTrainingHyperParams(model)
     p = X_train.shape[1]
 
     chunk_list = [num_cuts] * (ncat)
 
-    # Set the parameters for training deep knockoffs
+        # Set the parameters for training deep knockoffs
     pars = dict()
     # Number of epochs
     pars['epochs'] = 100
