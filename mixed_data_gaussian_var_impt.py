@@ -67,6 +67,7 @@ for p in p_list:
     training_params = parameters.GetTrainingHyperParams(model)
     p = X_train.shape[1]
 
+    chunk_list = [num_cuts] * (ncat)
 
     # Set the parameters for training deep knockoffs
     pars = dict()
