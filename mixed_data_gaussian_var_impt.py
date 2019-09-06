@@ -121,8 +121,9 @@ for p in p_list:
     # Kernel widths for the MMD measure (uniform weights)
     pars['alphas'] = [1., 2., 4., 8., 16., 32., 64., 128.]
 
+    pars_name = MODEL_DIRECTORY + 'pars' + '_p_' + str(p_size) + timestamp + '.npy'
     # Save parameters
-    np.save(MODEL_DIRECTORY + 'pars' + '_p_' + str(p_size) + timestamp + '.npy', pars)
+    np.save(pars_name, pars)
 
     # Where to store the machine
     checkpoint_name = MODEL_DIRECTORY + model + timestamp + '_p_' + str(p_size) 
