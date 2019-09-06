@@ -34,7 +34,7 @@ for p in p_list:
 
     # Number of training examples
     n = 1000
-    ncat = int(p/2)
+    ncat = int(p/4)
     cat_columns = np.arange(0, ncat)
     num_cuts = 4
 
@@ -49,7 +49,7 @@ for p in p_list:
     # mcd = MinCovDet().fit(X_train)
     # SigmaHat = mcd.covariance_ 
 
-    SigmaHat= SigmaHat + (5e-2)*np.eye(SigmaHat.shape[0])
+    SigmaHat= SigmaHat + (5e-3)*np.eye(SigmaHat.shape[0])
 
     # second_order = gk.GaussianKnockoffs(SigmaHat_mcd, mu=np.mean(X_train, 0), method="sdp", regularizer=1e-1)
     # second_order = gk.GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp", regularizer=1e-1)
@@ -62,7 +62,7 @@ for p in p_list:
     print(np.average(corr_g))
 
     print(np.average(corr_g[1:(num_cuts*ncat)]))
-    print(np.average(corr_g[((num_cuts*ncat)+1):((num_cuts*ncat)+ int(p/2))]))
+    print(np.average(corr_g[((num_cuts*ncat)+1):((num_cuts*ncat)+ int(p/4))]))
 
     training_params = parameters.GetTrainingHyperParams(model)
     training_params['LAMBDA'] = 0.0078
