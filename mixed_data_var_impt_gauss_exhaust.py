@@ -16,7 +16,7 @@ for p in p_list:
     now = datetime.datetime.now()
     timestamp = now.strftime('%Y-%m-%dT%H:%M:%S') + ('-%02d' % (now.microsecond / 10000))
 
-    MODEL_DIRECTORY = "/home/pvossler/cm_idea/exhaustive_test/exhaustive_test"
+    MODEL_DIRECTORY = "/home/pvossler/cm_idea/exhaustive_test/exhaustive_test_2e3/exhaustive_test"
     print(p)
     p_size = p
     # Load the built-in multivariate Student's-t model and its default parameters
