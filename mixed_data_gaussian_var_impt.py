@@ -11,7 +11,7 @@ import datetime
 
 
 # Number of features
-p_list = [50, 100]
+p_list = [50]
 for p in p_list:
     now = datetime.datetime.now()
     timestamp = now.strftime('%Y-%m-%dT%H:%M:%S') + ('-%02d' % (now.microsecond / 10000))
@@ -49,7 +49,7 @@ for p in p_list:
     mcd = MinCovDet().fit(X_train)
     SigmaHat = mcd.covariance_ 
 
-    SigmaHat= SigmaHat + (1e-1)*np.eye(SigmaHat.shape[0])
+    SigmaHat= SigmaHat + (2e-4)*np.eye(SigmaHat.shape[0])
 
     # second_order = gk.GaussianKnockoffs(SigmaHat_mcd, mu=np.mean(X_train, 0), method="sdp", regularizer=1e-1)
     # second_order = gk.GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp", regularizer=1e-1)
@@ -66,7 +66,7 @@ for p in p_list:
 
     training_params = parameters.GetTrainingHyperParams(model)
     training_params['LAMBDA'] = 0.0078
-    training_params['DELTA'] = 0.0078
+    training_params['DELTA'] = 0.0055
     p = X_train.shape[1]
     print(p)
     print(X_train.shape)
