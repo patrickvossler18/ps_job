@@ -16,7 +16,7 @@ for p in p_list:
     now = datetime.datetime.now()
     timestamp = now.strftime('%Y-%m-%dT%H:%M:%S') + ('-%02d' % (now.microsecond / 10000))
 
-    MODEL_DIRECTORY = "/home/pvossler/cm_idea/exhaustive_test"
+    MODEL_DIRECTORY = "/home/pvossler/cm_idea/exhaustive_test/exhaustive_test"
     print(p)
     p_size = p
     # Load the built-in multivariate Student's-t model and its default parameters
@@ -49,7 +49,7 @@ for p in p_list:
     mcd = MinCovDet().fit(X_train)
     SigmaHat = mcd.covariance_ 
 
-    SigmaHat= SigmaHat + (1e-1)*np.eye(SigmaHat.shape[0])
+    SigmaHat= SigmaHat + (2e-3)*np.eye(SigmaHat.shape[0])
 
     # second_order = gk.GaussianKnockoffs(SigmaHat_mcd, mu=np.mean(X_train, 0), method="sdp", regularizer=1e-1)
     # second_order = gk.GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp", regularizer=1e-1)
