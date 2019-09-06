@@ -45,11 +45,11 @@ for p in p_list:
     X_train_dums = pd.get_dummies(X_train.iloc[:, cat_columns], prefix=X_train.iloc[:, cat_columns].columns.values.astype(str).tolist())
     X_train = pd.concat([X_train_dums.reset_index(drop=True), X_train.drop(cat_columns, axis=1).reset_index(drop=True)], axis=1)
 
-    # SigmaHat = np.cov(X_train, rowvar=False)
-    mcd = MinCovDet().fit(X_train)
-    SigmaHat = mcd.covariance_ 
+    SigmaHat = np.cov(X_train, rowvar=False)
+    # mcd = MinCovDet().fit(X_train)
+    # SigmaHat = mcd.covariance_ 
 
-    SigmaHat= SigmaHat + (2e-4)*np.eye(SigmaHat.shape[0])
+    SigmaHat= SigmaHat + (5e-2)*np.eye(SigmaHat.shape[0])
 
     # second_order = gk.GaussianKnockoffs(SigmaHat_mcd, mu=np.mean(X_train, 0), method="sdp", regularizer=1e-1)
     # second_order = gk.GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp", regularizer=1e-1)
