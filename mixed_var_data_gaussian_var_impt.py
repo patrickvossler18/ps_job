@@ -94,7 +94,7 @@ pars['family'] = "continuous"
 # Dimensions of the data
 pars['p'] = p
 # List of categorical variables
-pars['cat_var_idx'] = np.arange(0, (np.sum(num_cuts)-1))
+pars['cat_var_idx'] = np.arange(0, (np.sum(num_cuts)))
 # Number of discrete variables
 pars['ncat'] = ncat
 # Number of categories
