@@ -2,7 +2,8 @@ import numpy as np
 import pandas as pd
 from DeepKnockoffs import KnockoffMachine
 from DeepKnockoffs import GaussianKnockoffs
-sys.path.append("/home/pvossler/ps_job")
+sys.path.insert(1, "/home/pvossler/ps_job")
+# sys.path.append("/home/pvossler/ps_job")
 import data
 import parameters
 from sklearn.covariance import MinCovDet, LedoitWolf
