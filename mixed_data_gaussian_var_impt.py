@@ -75,14 +75,14 @@ training_params = parameters.GetTrainingHyperParams(model)
 training_params['LAMBDA'] = 0.0078
 training_params['DELTA'] = 0.0055
 p = X_train.shape[1]
-print(p)
+
 print(X_train.shape)
 chunk_list = [num_cuts] * (ncat)
 
     # Set the parameters for training deep knockoffs
 pars = dict()
 # Number of epochs
-pars['epochs'] = 50
+pars['epochs'] = 25
 # Number of iterations over the full data per epoch
 pars['epoch_length'] = 100
 # Data type, either "continuous" or "binary"
