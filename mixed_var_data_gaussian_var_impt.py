@@ -37,7 +37,7 @@ distribution_params = parameters.GetDistributionParams(model, p)
 DataSampler = data.DataSampler(distribution_params)
 
 # Number of training examples
-n = 1000
+n = 2000
 ncat = int(p/2)
 cat_columns = np.arange(0, ncat)
 # num_cuts = 4
@@ -74,6 +74,11 @@ print(np.average(corr_g))
 
 print(np.average(corr_g[1:(np.sum(num_cuts)-1)]))
 print(np.average(corr_g[((np.sum(num_cuts)-1)+1):]))
+
+avg_corr = np.average(corr_g)
+
+avg_corr_cat = np.average(corr_g[1:(num_cuts*ncat)])
+avg_corr_cont = np.average(corr_g[((num_cuts*ncat)+1):((num_cuts*ncat)+ int(p/4))])
 
 training_params = parameters.GetTrainingHyperParams(model)
 training_params['LAMBDA'] = 0.0078
