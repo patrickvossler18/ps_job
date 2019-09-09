@@ -41,8 +41,12 @@ n = 5000
 ncat = int(p/2)
 cat_columns = np.arange(0, ncat)
 # num_cuts = 4
-num_cuts = np.random.randint(2,5,len(cat_columns))
-
+# num_cuts = np.random.randint(2,5,len(cat_columns))
+# used a fixed num_cuts from pars_p_1002019-09-08T21:05:57-73.npy
+if p = 100:
+    num_cuts = [3, 3, 3, 4, 4, 4, 3, 2, 2, 4, 2, 4, 3, 3, 4, 4, 2, 3, 2, 4, 3, 3, 2, 2, 2, 4, 3, 4, 2, 2, 2, 2, 3, 3, 2, 2, 3, 3, 4, 4, 4, 4, 4, 4,2, 3, 4, 4, 4, 2]
+else:
+    num_cuts = np.random.randint(2,5,len(cat_columns))
 
 # USE THIS FOR JUST K DUMMY VARIABLES
 X_train = pd.DataFrame(DataSampler.sample(n))
