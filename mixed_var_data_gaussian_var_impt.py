@@ -86,7 +86,7 @@ training_params['DELTA'] = 0.0078
 p = X_train.shape[1]
 
 print(X_train.shape)
-chunk_list = [num_cuts] * (ncat)
+# chunk_list = [num_cuts] * (ncat)
 
     # Set the parameters for training deep knockoffs
 pars = dict()
