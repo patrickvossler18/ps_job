@@ -85,8 +85,8 @@ avg_corr_cat = np.average(corr_g[1:(np.sum(num_cuts)-1)])
 avg_corr_cont = np.average(corr_g[((np.sum(num_cuts)-1)+1):])
 
 training_params = parameters.GetTrainingHyperParams(model)
-training_params['LAMBDA'] = 0.0078
-training_params['DELTA'] = 0.0078
+training_params['LAMBDA'] = 0.01
+training_params['DELTA'] = 0.01
 p = X_train.shape[1]
 
 print(X_train.shape)
