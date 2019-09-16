@@ -97,7 +97,7 @@ pars['mixed_data'] = False
 pars['kappa'] = 1
 # Boolean for using the different decorr loss function from the paper
 pars['diff_decorr'] = False
-Size of the test set
+# Size of the test set
 pars['test_size'] = 0
 # Batch size
 pars['batch_size'] = int(0.5*n)
