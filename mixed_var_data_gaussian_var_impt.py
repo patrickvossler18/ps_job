@@ -16,7 +16,7 @@ import datetime
 # Number of features
 # p_list = [50]
 # for p in p_list:
-p = 100
+p = 50
 now = datetime.datetime.now()
 timestamp = now.strftime('%Y-%m-%dT%H:%M:%S') + ('-%02d' % (now.microsecond / 10000))
 
@@ -37,13 +37,13 @@ distribution_params = parameters.GetDistributionParams(model, p)
 DataSampler = data.DataSampler(distribution_params)
 
 # Number of training examples
-n = 5000
+n = 1000
 ncat = int(p/2)
 cat_columns = np.arange(0, ncat)
 # num_cuts = 4
 # num_cuts = np.random.randint(2,5,len(cat_columns))
 # used a fixed num_cuts from pars_p_1002019-09-08T21:05:57-73.npy
-if p == 100:
+if p == 100 or p == 50:
     num_cuts = [3, 3, 3, 4, 4, 4, 3, 2, 2, 4, 2, 4, 3, 3, 4, 4, 2, 3, 2, 4, 3, 3, 2, 2, 2, 4, 3, 4, 2, 2, 2, 2, 3, 3, 2, 2, 3, 3, 4, 4, 4, 4, 4, 4,2, 3, 4, 4, 4, 2]
 else:
     num_cuts = np.random.randint(2,5,len(cat_columns))
@@ -85,8 +85,8 @@ avg_corr_cat = np.average(corr_g[1:(np.sum(num_cuts)-1)])
 avg_corr_cont = np.average(corr_g[((np.sum(num_cuts)-1)+1):])
 
 training_params = parameters.GetTrainingHyperParams(model)
-training_params['LAMBDA'] = 0.01
-training_params['DELTA'] = 0.01
+training_params['LAMBDA'] = 0.0078
+training_params['DELTA'] = 0.0078
 p = X_train.shape[1]
 
 print(X_train.shape)
