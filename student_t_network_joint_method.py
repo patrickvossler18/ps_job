@@ -17,7 +17,7 @@ MODEL_DIRECTORY = "/home/pvossler/cm_idea/"
 
 MODEL_DIRECTORY = "/home/pvossler/cm_idea/"
 print(p)
-p_size = p
+p_size = int(p)
 
 # Load the built-in multivariate Student's-t model and its default parameters
 # The currently available built-in models are:
