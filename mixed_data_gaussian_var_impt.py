@@ -15,7 +15,7 @@ import datetime
 # Number of features
 # p_list = [50]
 # for p in p_list:
-p = 100
+p = 50
 now = datetime.datetime.now()
 timestamp = now.strftime('%Y-%m-%dT%H:%M:%S') + ('-%02d' % (now.microsecond / 10000))
 
@@ -36,7 +36,7 @@ distribution_params = parameters.GetDistributionParams(model, p)
 DataSampler = data.DataSampler(distribution_params)
 
 # Number of training examples
-n = 5000
+n = 1000
 ncat = int(p/2)
 cat_columns = np.arange(0, ncat)
 num_cuts = 4
