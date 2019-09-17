@@ -36,7 +36,7 @@ distribution_params = parameters.GetDistributionParams(model, p)
 DataSampler = data.DataSampler(distribution_params)
 
 # Number of training examples
-n = 2000
+n = 1000
 ncat = int(p/2)
 cat_columns = np.arange(0, ncat)
 num_cuts = 4
@@ -87,7 +87,7 @@ chunk_list = [num_cuts] * (ncat)
     # Set the parameters for training deep knockoffs
 pars = dict()
 # Number of epochs
-pars['epochs'] = 50
+pars['epochs'] = 25
 # Number of iterations over the full data per epoch
 pars['epoch_length'] = 100
 # Data type, either "continuous" or "binary"
