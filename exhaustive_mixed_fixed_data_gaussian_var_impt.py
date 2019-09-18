@@ -30,9 +30,9 @@ pars['avg_corr'] = avg_corr
 pars['avg_corr_cat'] = avg_corr_cat
 pars['avg_corr_cont'] = avg_corr_cont
 # Number of epochs
-pars['epochs'] = 25
+pars['epochs'] = 15
 # Number of iterations over the full data per epoch
-pars['epoch_length'] = 50
+pars['epoch_length'] = 100
 # Data type, either "continuous" or "binary"
 pars['family'] = "continuous"
 # Dimensions of the data
