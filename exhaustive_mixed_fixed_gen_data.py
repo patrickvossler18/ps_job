@@ -13,8 +13,7 @@ import datetime
 
 
 
-
-p = 100
+p = 300
 now = datetime.datetime.now()
 timestamp = now.strftime('%Y-%m-%dT%H:%M:%S') + ('-%02d' % (now.microsecond / 10000))
 
@@ -57,13 +56,29 @@ else:
 # reg_val = 5e-3
 SigmaHat= SigmaHat + (reg_val)*np.eye(SigmaHat.shape[0])
 
-# second_order = gk.GaussianKnockoffs(SigmaHat_mcd, mu=np.mean(X_train, 0), method="sdp", regularizer=1e-1)
-# second_order = gk.GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp", regularizer=1e-1)
 
-second_order = GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp")
+if p > 100:
+    identity_p = np.identity(p)
+    Sigma_inv = np.linalg.solve(SigmaHat, identity_p)
 
-# Measure pairwise second-order knockoff correlations
-corr_g = (np.diag(SigmaHat) - np.diag(second_order.Ds)) / np.diag(SigmaHat)
+    def ASDPoptim(Sigma, Sigma_inv, block_size, approx_method):
+            sol = utils.asdp(Sigma, block_size, approx_method)
+            s = np.diag(np.array(sol).flatten())
+            C2 = 2. * s - np.dot(s, np.dot(Sigma_inv, s))        
+            return(C2, s)
+
+    C2, s = ASDPoptim(SigmaHat, Sigma_inv,50, approx_method="selfblocks")
+
+
+    Ds = np.multiply(s,np.diag(SigmaHat))
+
+    corr_g = (np.diag(SigmaHat) - np.diag(Ds)) / np.diag(SigmaHat)
+
+else:
+    second_order = GaussianKnockoffs(SigmaHat, mu=np.mean(X_train, 0), method="sdp")
+
+    # Measure pairwise second-order knockoff correlations
+    corr_g = (np.diag(SigmaHat) - np.diag(second_order.Ds)) / np.diag(SigmaHat)
 
 print(np.average(corr_g))
 

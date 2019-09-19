@@ -1,6 +1,6 @@
 import numpy as np
 from DeepKnockoffs import KnockoffMachine
-from DeepKnockoffs import GaussianKnockoffs
+from DeepKnockoffs import GaussianKnockoff
 import data
 import parameters
 from sklearn.covariance import MinCovDet, LedoitWolf
@@ -72,8 +72,8 @@ for p_size in [300,500]:
     training_params = parameters.GetTrainingHyperParams(model)
     training_params['LAMBDA'] = 0.001
     training_params['DELTA'] = 0.05
-    
-    
+
+
     p = X_train.shape[1]
 
     # Set the parameters for training deep knockoffs
