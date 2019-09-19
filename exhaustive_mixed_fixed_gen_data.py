@@ -13,7 +13,7 @@ import datetime
 
 
 
-p = 300
+p = int(p_arg)
 now = datetime.datetime.now()
 timestamp = now.strftime('%Y-%m-%dT%H:%M:%S') + ('-%02d' % (now.microsecond / 10000))
 
