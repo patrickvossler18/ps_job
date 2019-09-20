@@ -56,6 +56,8 @@ else:
 # reg_val = 5e-3
 SigmaHat= SigmaHat + (reg_val)*np.eye(SigmaHat.shape[0])
 
+p = SigmaHat.shape[1]
+
 if p > 100:
     identity_p = np.identity(SigmaHat.shape[1])
     Sigma_inv = np.linalg.solve(SigmaHat, identity_p)
