@@ -18,7 +18,7 @@ training_params = parameters.GetTrainingHyperParams(model)
 training_params['LAMBDA'] = lambda_val
 training_params['DELTA'] = delta_val
 
-
+n = X_train.shape[0]
 p = X_train.shape[1]
 
 # Set the parameters for training deep knockoffs
@@ -26,9 +26,9 @@ pars = dict()
 
 pars['avg_corr'] = avg_corr
 # Number of epochs
-pars['epochs'] = 50
+pars['epochs'] = 15
 # Number of iterations over the full data per epoch
-pars['epoch_length'] = 50
+pars['epoch_length'] = 100
 # Data type, either "continuous" or "binary"
 pars['family'] = "continuous"
 # Dimensions of the data
