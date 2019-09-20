@@ -58,7 +58,7 @@ SigmaHat= SigmaHat + (reg_val)*np.eye(SigmaHat.shape[0])
 
 
 if p > 100:
-    identity_p = np.identity(p)
+    identity_p = np.identity(SigmaHat.shape[1])
     Sigma_inv = np.linalg.solve(SigmaHat, identity_p)
 
     def ASDPoptim(Sigma, Sigma_inv, block_size, approx_method):
