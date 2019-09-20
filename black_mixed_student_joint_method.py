@@ -25,8 +25,6 @@ p = X_train.shape[1]
 pars = dict()
 
 pars['avg_corr'] = avg_corr
-pars['avg_corr_cat'] = avg_corr_cat
-pars['avg_corr_cont'] = avg_corr_cont
 # Number of epochs
 pars['epochs'] = 50
 # Number of iterations over the full data per epoch
