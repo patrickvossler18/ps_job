@@ -26,7 +26,7 @@ black_train_msk_path = MODEL_DIRECTORY+"black_train_msk.csv"
 model = "mixed_student"
 
 # Load data
-black_data = pd.read_csv("/home/pvossler/ps_jobblack_clean.csv")
+black_data = pd.read_csv("/home/pvossler/ps_job/black_clean.csv")
 
 factor_list = pd.read_csv("/home/pvossler/ps_job/black_factor_list.csv").values.tolist()
 chunk_list = pd.read_csv("/home/pvossler/ps_job/black_chunk_list.csv").values.tolist()
