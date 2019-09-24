@@ -15,7 +15,7 @@ import datetime
 # Number of features
 # p_list = [50]
 # for p in p_list:
-p = 100
+p = 50
 now = datetime.datetime.now()
 timestamp = now.strftime('%Y-%m-%dT%H:%M:%S') + ('-%02d' % (now.microsecond / 10000))
 
