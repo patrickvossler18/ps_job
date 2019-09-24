@@ -77,6 +77,9 @@ else:
 print(np.average(corr_g))
 
 training_params = parameters.GetTrainingHyperParams(model)
+training_params['LAMBDA'] = 0.001
+training_params['DELTA'] = 0.05
+
 
 # Set the parameters for training deep knockoffs
 pars = dict()
