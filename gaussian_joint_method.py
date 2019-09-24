@@ -76,6 +76,8 @@ else:
 
 print(np.average(corr_g))
 
+training_params = parameters.GetTrainingHyperParams(model)
+
 # Set the parameters for training deep knockoffs
 pars = dict()
 # Number of epochs
