@@ -27,8 +27,6 @@ chunk_list = [num_cuts] * (ncat)
 pars = dict()
 
 pars['avg_corr'] = avg_corr
-pars['avg_corr_cat'] = avg_corr_cat
-pars['avg_corr_cont'] = avg_corr_cont
 # Number of epochs
 pars['epochs'] = 15
 # Number of iterations over the full data per epoch

@@ -79,5 +79,3 @@ print(np.average(corr_g[((np.sum(num_cuts)-1)+1):]))
 
 avg_corr = np.average(corr_g)
 
-avg_corr_cat = np.average(corr_g[1:(np.sum(num_cuts)-1)])
-avg_corr_cont = np.average(corr_g[((np.sum(num_cuts)-1)+1):])
