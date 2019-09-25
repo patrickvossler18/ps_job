@@ -21,7 +21,6 @@ training_params['DELTA'] = delta_val
 p = X_train.shape[1]
 
 print(X_train.shape)
-chunk_list = [num_cuts] * (ncat)
 
     # Set the parameters for training deep knockoffs
 pars = dict()
@@ -36,7 +35,7 @@ pars['family'] = "continuous"
 # Dimensions of the data
 pars['p'] = p
 # List of categorical variables
-pars['cat_var_idx'] = np.arange(0, (ncat * (num_cuts)))
+# pars['cat_var_idx'] = np.arange(0, (ncat * (num_cuts)))
 # Number of discrete variables
 # pars['ncat'] = ncat
 # # Number of categories
