@@ -74,8 +74,6 @@ else:
 
 print(np.average(corr_g))
 
-print(np.average(corr_g[1:(np.sum(num_cuts)-1)]))
-print(np.average(corr_g[((np.sum(num_cuts)-1)+1):]))
 
 avg_corr = np.average(corr_g)
 
