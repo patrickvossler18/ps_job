@@ -26,7 +26,7 @@ pars = dict()
 
 pars['avg_corr'] = avg_corr
 # Number of epochs
-pars['epochs'] = 15
+pars['epochs'] = 20
 # Number of iterations over the full data per epoch
 pars['epoch_length'] = 100
 # Data type, either "continuous" or "binary"
