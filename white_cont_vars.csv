@@ -1,7 +1,15 @@
 variable
+byear
+fage
 mage
+feduc
 meduc
+terms
+gestation
 prenatal
 prenatal_visits
+mom_zip
+wtgain
+med_inc
 pc_inc
 popdens
