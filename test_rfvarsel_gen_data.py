@@ -22,7 +22,7 @@ MODEL_DIRECTORY = "/home/pvossler/cm_idea/misc_test/"
 # - mstudent : Multivariate Student's-t distribution
 # - sparse   : Multivariate sparse Gaussian distribution
 # model = "mixed_student"
-model = "mixed_student"
+model = "gaussian"
 
 # Load data
 
@@ -37,7 +37,7 @@ X =  dat_lin_combined.drop(columns=["Y","W"])
 
 # Split train test 80-20 and save index of train data for later
 X_train = X.sample(frac=0.8,random_state=200)
-train_idx = X_train.index
+train_idx = X_train.index.values
 
 # Regularize the covariance and generate second order knockoffs
 if robust_cov:
